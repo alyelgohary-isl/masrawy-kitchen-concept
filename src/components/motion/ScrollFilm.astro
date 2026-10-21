@@ -29,8 +29,8 @@ type FrameRef = [source: string, frame: number];
 type Segment =
   | { id: string; units: number; from: FrameRef; to: FrameRef }
   | { id: string; units: number; hold: FrameRef }
-  /** No frame: the film drops to the ground, a rule draws across and `label` (with an optional Arabic `ar`) appears */
-  | { id: string; units: number; cut: true; label: string; ar?: string };
+  /** No frame: the film drops to the ground and a rule draws across; an optional `label` (with an optional Arabic `ar`) appears under it */
+  | { id: string; units: number; cut: true; label?: string; ar?: string };
 
 interface Props {
   sources: Record<string, { dir: string; prefix: string; count: number; ext?: string }>;

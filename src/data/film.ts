@@ -1,7 +1,7 @@
 /* "A Taste of Egypt." The home film (v3: beats caption the dish on screen; ~7 units of scroll), passed to <ScrollFilm> in src/pages/index.astro.
    Six Kling 3.0 clips, 61 frames each (366). Wide clips cover the viewport; the three close-ups are squares that float on the cream ground (bleed layout).
    Every clip starts (or ends) on one of the client's own photographs, so the motion is added to their real food and room, never invented.
-   Between clips a `cut` segment drops the film to the ground and draws a gold rule with the next chapter's label, so the change of image reads as a page turn, not a jump.
+   Between clips a `cut` segment drops the film to the ground and draws a gold rule across, so the change of image reads as a page turn, not a jump.
    Provenance and prompts: work/beats.md and work/gen/kie.log. */
 
 export const sources = {
@@ -14,25 +14,25 @@ export const sources = {
 };
 
 type Ref = [keyof typeof sources, number];
-type Segment = { id: string; units: number } & ({ from: Ref; to: Ref } | { hold: Ref } | { cut: true; label: string; ar?: string });
+type Segment = { id: string; units: number } & ({ from: Ref; to: Ref } | { hold: Ref } | { cut: true; label?: string; ar?: string });
 
 export const timeline: Segment[] = [
   { id: "hero",    units: 0.5,  hold: ["screen", 0] },                      // "A Taste of Egypt" over the lit room
   { id: "screen",  units: 0.5,  from: ["screen", 0],  to: ["screen", 30] }, // a short glide toward the pattern
   { id: "h1",      units: 0.15, hold: ["screen", 30] },
-  { id: "c1",      units: 0.2,  cut: true, label: "Welcome", ar: "أهلاً" },
+  { id: "c1",      units: 0.2,  cut: true },
   { id: "coffee",  units: 0.7,  from: ["coffee", 0],  to: ["coffee", 60] }, // coffee from the kanaka
   { id: "h2",      units: 0.2,  hold: ["coffee", 60] },
-  { id: "c2",      units: 0.2,  cut: true, label: "Koshary", ar: "كشري" },
+  { id: "c2",      units: 0.2,  cut: true },
   { id: "koshary", units: 0.8,  from: ["koshary", 0], to: ["koshary", 60] },// the bowl builds
   { id: "h3",      units: 0.25, hold: ["koshary", 60] },
-  { id: "c3",      units: 0.2,  cut: true, label: "The grill", ar: "مشويات" },
+  { id: "c3",      units: 0.2,  cut: true },
   { id: "tahina",  units: 0.65, from: ["tahina", 0],  to: ["tahina", 48] }, // tahina over kofta (frames 49–60 morph the jug; unused)
   { id: "h4",      units: 0.2,  hold: ["tahina", 48] },
-  { id: "c4",      units: 0.2,  cut: true, label: "The table", ar: "سفرة" },
+  { id: "c4",      units: 0.2,  cut: true },
   { id: "hands",   units: 0.7,  from: ["hands", 0],   to: ["hands", 60] },  // hands reach into the spread
   { id: "h5",      units: 0.2,  hold: ["hands", 60] },
-  { id: "c5",      units: 0.2,  cut: true, label: "The room", ar: "الصالة" },
+  { id: "c5",      units: 0.2,  cut: true },
   { id: "night",   units: 0.8,  from: ["night", 0],   to: ["night", 60] },  // lunch to lantern hour
   { id: "end",     units: 0.45, hold: ["night", 60] },
 ];
