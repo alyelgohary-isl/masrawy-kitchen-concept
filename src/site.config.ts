@@ -45,7 +45,7 @@ export const site = {
   /** Google Fonts stylesheet; change together with --font-* in src/styles/style.css */
   fonts: "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0..100;1,9..144,300..700,0..100&family=Albert+Sans:wght@300;400;500;600&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap",
   /** Letter favicon drawn as an inline SVG */
-  favicon: { letter: "م", background: "#1b1310", color: "#d4b87a" },
+  favicon: { letter: "م", background: "#23282f", color: "#ab965d" },
   /** Default OG image in public/ */
   ogImage: "assets/img/og.webp",
 
@@ -59,15 +59,16 @@ export const site = {
   cta: { label: "Order online", href: orderUrl },
   secondaryCta: { label: "Reserve", href: "reserve/" },
 
+  /** Footer copy, as on the current site */
   footer: {
-    columns: [
-      { title: "Eat", links: [{ label: "Menu", href: "menu/" }, { label: "Brunch", href: "brunch/" }, { label: "Order online", href: orderUrl }, { label: "Reserve a table", href: "reserve/" }] },
-      { title: "Host", links: [{ label: "The Room", href: "the-room/" }, { label: "Catering", href: "catering/" }, { label: "Corporate catering", href: "catering/#corporate" }, { label: "Private events", href: "the-room/#book" }] },
-      { title: "Masrawy", links: [{ label: "Our story", href: "our-story/" }, { label: "Press", href: "our-story/#press" }, { label: "Gallery", href: "gallery/" }, { label: "Contact", href: "contact/" }, { label: "Legal", href: "legal/" }] },
+    about: "Authentic Egyptian food made from original recipes and prepared with fresh 100% Halal ingredients. All our beautiful photos were taken by DK Photography.",
+    newsletterNote: "* We never send you spam!",
+    legalName: "Masrawy Fine Egyptian Catering",
+    links: [
+      { label: "Menu", href: "menu/" }, { label: "Breakfast", href: "brunch/" }, { label: "The Room", href: "the-room/" },
+      { label: "Catering", href: "catering/" }, { label: "Our Story", href: "our-story/" }, { label: "Gallery", href: "gallery/" },
+      { label: "Reserve", href: "reserve/" }, { label: "Contact", href: "contact/" }, { label: "Legal", href: "legal/" },
     ],
-    newsletter: "Ramadan menus, brunch specials and the odd event, straight to your inbox.",
-    /** Copyright line tail */
-    legal: "Photography by DK Photography.",
   },
 
   /** Restaurant JSON-LD merged over the Organization defaults in Layout.astro */

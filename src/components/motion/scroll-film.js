@@ -36,7 +36,11 @@ function initScrollFilm(root, cfg) {
   };
   const FRAME_COUNT = FILES.length;
 
+  /* A `cut` segment shows no frame: the film drops to the ground, a rule draws across and the
+     next chapter's label appears (the .film-cut element). It borrows the next clip's first
+     frame so streaming order and the nearest-frame fallback stay in scroll order. */
   const TIMELINE = cfg.timeline.map((s) => {
+    if (s.cut) return { id: s.id, units: s.units, cut: true, label: s.label || "", ar: s.ar || "", f0: 0, f1: 0 };
     const [from, to] = s.hold ? [s.hold, s.hold] : [s.from, s.to];
     return { id: s.id, units: s.units, f0: F(from), f1: F(to) };
   });
@@ -44,6 +48,14 @@ function initScrollFilm(root, cfg) {
     const total = TIMELINE.reduce((a, s) => a + s.units, 0);
     let acc = 0;
     for (const s of TIMELINE) { s.p0 = acc / total; acc += s.units; s.p1 = acc / total; }
+    TIMELINE.forEach((s, i) => {
+      if (!s.cut) return;
+      const prev = TIMELINE.slice(0, i).reverse().find((x) => !x.cut);
+      const next = TIMELINE.slice(i + 1).find((x) => !x.cut);
+      s.prevF = prev ? prev.f1 : 0;
+      s.nextF = next ? next.f0 : (prev ? prev.f1 : 0);
+      s.f0 = s.f1 = s.nextF;
+    });
   }
   const SEG = Object.fromEntries(TIMELINE.map((s) => [s.id, s]));
   /* "clip1:0.15" → progress 15% of the way into segment clip1 */
@@ -93,14 +105,21 @@ function initScrollFilm(root, cfg) {
       const size = Math.min(cw * 0.94, ch * 0.38);
       return { dx: (cw - size) / 2, dy: ch - size - ch * 0.03, dw: size, dh: size, crop: true };
     }
-    const S = Math.min(Math.max(ch, cw * 9 / 16), ch * 1.25);   // the square's size on screen
-    const W = S * 16 / 9;                                        // a 16:9 frame at that scale
-    let wx = cw * 0.56 - W / 2;
-    wx = W >= cw ? Math.min(0, Math.max(cw - W, wx)) : Math.max(0, Math.min(cw - W, wx));
-    const wy = (ch - S) / 2;
-    const sx = wx + (W - S) / 2;
-    if (iw > ih * 1.2) return { dx: wx, dy: wy, dw: W, dh: S, crop: false, square: false };
-    return { dx: sx, dy: wy, dw: S, dh: S, crop: false, square: true };
+    if (iw > ih * 1.2) {
+      // wide frame: covers the viewport, centred a little right so the copy column keeps the left
+      const S = Math.min(Math.max(ch, cw * 9 / 16), ch * 1.25);
+      const W = S * 16 / 9;
+      let wx = cw * 0.56 - W / 2;
+      wx = W >= cw ? Math.min(0, Math.max(cw - W, wx)) : Math.max(0, Math.min(cw - W, wx));
+      return { dx: wx, dy: (ch - S) / 2, dw: W, dh: S, crop: false, square: false };
+    }
+    // square frame: floats on the ground to the right of the copy column, clear of the header
+    const gutter = Math.min(Math.max(16, cw / dpr * 0.04), 56) * dpr;
+    const col = Math.min(Math.max(320, cw / dpr * 0.34), 480) * dpr + gutter;   // mirrors --film-text-col + gutter
+    const top = headerOffset * dpr;
+    const S = Math.min(ch - top - ch * 0.04, cw - col - gutter);
+    const dx = Math.max(col, Math.min(cw - gutter - S, cw * 0.66 - S / 2));
+    return { dx, dy: top + (ch - top - S) / 2, dw: S, dh: S, crop: false, square: true };
   }
   function publishSquareRect() {
     const r = bleedRect(1, 1);
@@ -133,13 +152,34 @@ function initScrollFilm(root, cfg) {
     ctx.closePath();
   }
 
-  function drawFrame(index) {
+  /* Cream scrim under the copy column on wide frames (landscape), so the copy reads as ink on
+     paper. Square frames already float on the ground to the right of the column. */
+  function drawScrim() {
+    if (!cfg.scrim) return;
+    const cw = canvas.width, ch = canvas.height;
+    if (!(cw > ch * 1.05)) return;
+    const col = Math.min(Math.max(320, cw / dpr * 0.4), 576) * dpr;          // mirrors --film-text-col
+    const gutter = Math.min(Math.max(16, cw / dpr * 0.04), 56) * dpr;
+    const edge = col + gutter;
+    const g = ctx.createLinearGradient(0, 0, edge * 1.35, 0);
+    const c = cfg.scrim.color || ground;
+    const rgba = (a) => c.startsWith("#") ? `rgba(${parseInt(c.slice(1, 3), 16)}, ${parseInt(c.slice(3, 5), 16)}, ${parseInt(c.slice(5, 7), 16)}, ${a})` : c;
+    g.addColorStop(0, rgba(0.97));
+    g.addColorStop(0.5, rgba(0.9));
+    g.addColorStop(0.74, rgba(0.45));
+    g.addColorStop(1, rgba(0));
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, edge * 1.35, ch);
+  }
+
+  function drawFrame(index, alpha = 1) {
     let img = frames[index];
     for (let k = index; !img && k >= 0; k--) img = frames[k];   // nearest frame already loaded
-    if (!img) return;
     const cw = canvas.width, ch = canvas.height;
     ctx.fillStyle = ground;
     ctx.fillRect(0, 0, cw, ch);
+    if (!img || alpha <= 0) return;
+    ctx.globalAlpha = Math.min(1, alpha);
     if (bleed) {
       const iw = img.naturalWidth, ih = img.naturalHeight;
       const r = bleedRect(iw, ih);
@@ -158,8 +198,11 @@ function initScrollFilm(root, cfg) {
             g.addColorStop(0, ground); g.addColorStop(1, "rgba(0,0,0,0)");
             ctx.fillStyle = g; ctx.fillRect(Math.min(x0, x1), r.dy, Math.abs(x1 - x0), r.dh);
           }
+        } else {
+          drawScrim();
         }
       }
+      ctx.globalAlpha = 1;
       return;
     }
     const { dx, dy, dw, dh } = frameRect();
@@ -170,6 +213,18 @@ function initScrollFilm(root, cfg) {
     ctx.imageSmoothingQuality = "high";
     ctx.drawImage(img, dx, dy, dw, dh);
     ctx.restore();
+    ctx.globalAlpha = 1;
+  }
+
+  /* Inside a cut segment: which frame to show and how strongly (the outgoing frame fades over
+     the first quarter, the incoming one over the last quarter, ground between). */
+  function cutAt(p) {
+    const s = TIMELINE.find((s) => s.cut && p >= s.p0 && p <= s.p1);
+    if (!s) return null;
+    const t = (p - s.p0) / (s.p1 - s.p0);
+    if (t < 0.25) return { seg: s, t, frame: s.prevF, alpha: 1 - t / 0.25 };
+    if (t > 0.75) return { seg: s, t, frame: s.nextF, alpha: (t - 0.75) / 0.25 };
+    return { seg: s, t, frame: s.nextF, alpha: 0 };
   }
 
   function progressToFrame(p) {
@@ -332,6 +387,26 @@ function initScrollFilm(root, cfg) {
     });
   }
 
+  /* ——— The cut: a rule drawn across the ground with the next chapter's label ——— */
+
+  const cutEl = root.querySelector(".film-cut");
+  const cutRule = cutEl && cutEl.querySelector(".rule");
+  const cutLabel = cutEl && cutEl.querySelector(".label");
+  let cutShown = null;
+  function updateCut(c) {
+    if (!cutEl) return;
+    if (!c) { if (cutShown) { cutEl.style.opacity = 0; cutShown = null; } return; }
+    if (cutShown !== c.seg) {
+      cutShown = c.seg;
+      cutLabel.innerHTML = c.seg.label + (c.seg.ar ? ` <span class="ar" lang="ar">${c.seg.ar}</span>` : "");
+    }
+    const t = c.t;
+    const clamp = gsap.utils.clamp;
+    cutEl.style.opacity = clamp(0, 1, Math.min((t - 0.04) / 0.08, (0.96 - t) / 0.08));
+    cutRule.style.transform = `scaleX(${clamp(0, 1, (t - 0.1) / 0.45)})`;
+    cutLabel.style.opacity = clamp(0, 1, Math.min((t - 0.3) / 0.15, (0.9 - t) / 0.1));
+  }
+
   /* ——— Overlay + marquee ——— */
 
   const overlayEl = root.querySelector(".film-overlay");
@@ -364,6 +439,7 @@ function initScrollFilm(root, cfg) {
   /* ——— Master scroll binding ——— */
 
   const runway = root.querySelector(".film-runway");
+  let inCut = false;
 
   ScrollTrigger.create({
     trigger: runway,
@@ -372,11 +448,19 @@ function initScrollFilm(root, cfg) {
     scrub: true,
     onUpdate(self) {
       const p = self.progress;
-      const index = progressToFrame(p);
-      if (index !== currentFrame) {
-        currentFrame = index;
-        requestAnimationFrame(() => drawFrame(currentFrame));
+      const c = cutAt(p);
+      if (c) {
+        currentFrame = c.frame;
+        requestAnimationFrame(() => drawFrame(currentFrame, c.alpha));
+      } else {
+        const index = progressToFrame(p);
+        if (index !== currentFrame || inCut) {
+          currentFrame = index;
+          requestAnimationFrame(() => drawFrame(currentFrame));
+        }
       }
+      inCut = !!c;
+      updateCut(c);
       updateBand(p);
       updateOverlay(p);
       updateMarquee(p);

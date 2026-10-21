@@ -55,14 +55,14 @@ const schema = [
       <p class="ink-soft reveal" style="max-width:60ch;margin-top:12px">Minimum 10 of each item. Set-up available. All orders include disposable plates, cutlery, napkins and serving utensils.</p>
       {corporate.map((s) => (
         <section class="menu-section" id={`corp-${s.id}`}>
-          <div class="menu-head" style="border-bottom-color:var(--hair-light)"><h2 style="color:var(--ivory)">{s.title}</h2>{s.price && <span class="pricing" style="color:var(--ivory-soft)">{s.price}</span>}</div>
-          {s.note && <p class="menu-note" style="color:var(--ivory-soft)">{s.note}</p>}
+          <div class="menu-head"><h2>{s.title}</h2>{s.price && <span class="pricing">{s.price}</span>}</div>
+          {s.note && <p class="menu-note">{s.note}</p>}
           <div class="menu-items">
             {s.items.map((i) => (
-              <div class="menu-item" style="border-bottom-color:var(--hair-light)">
-                <div class="names"><h3 style="color:var(--ivory)">{i.name}</h3>{i.ar && <span class="ar" lang="ar" style="color:var(--brass-2)">{i.ar}</span>}{i.tags?.map((t) => <span class={tagClass(t)} style="border-color:var(--hair-light);color:var(--ivory-soft)">{t}</span>)}</div>
-                <span class="price" style="color:var(--brass-2)">{i.price ?? ""}</span>
-                {i.desc && <p style="color:var(--ivory-soft)">{i.desc}</p>}
+              <div class="menu-item">
+                <div class="names"><h3>{i.name}</h3>{i.ar && <span class="ar" lang="ar">{i.ar}</span>}{i.tags?.map((t) => <span class={tagClass(t)}>{t}</span>)}</div>
+                <span class="price">{i.price ?? ""}</span>
+                {i.desc && <p>{i.desc}</p>}
               </div>
             ))}
           </div>

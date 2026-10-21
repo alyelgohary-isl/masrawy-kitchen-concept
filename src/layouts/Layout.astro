@@ -76,7 +76,7 @@ const FAVICON = "data:image/svg+xml," + encodeURIComponent(
   <meta property="og:image" content={absolute(ogImage)} />
   <meta property="og:site_name" content={site.name} />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="theme-color" content="#1b1310" />
+  <meta name="theme-color" content="#f5f3f0" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href={site.fonts} rel="stylesheet" />
@@ -93,6 +93,5 @@ const FAVICON = "data:image/svg+xml," + encodeURIComponent(
   <!-- public/js/config.js holds the form endpoint and reCAPTCHA key; it stays a plain, unbundled file so it is easy to find and edit -->
   <script is:inline src={url("js/config.js")}></script>
   <script>import "../scripts/site.js";</script>
-  <script>import "../scripts/extras.js";</script>
 </body>
 </html>

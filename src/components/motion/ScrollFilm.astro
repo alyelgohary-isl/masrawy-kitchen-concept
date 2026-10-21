@@ -28,7 +28,9 @@ import { url } from "../../lib/url";
 type FrameRef = [source: string, frame: number];
 type Segment =
   | { id: string; units: number; from: FrameRef; to: FrameRef }
-  | { id: string; units: number; hold: FrameRef };
+  | { id: string; units: number; hold: FrameRef }
+  /** No frame: the film drops to the ground, a rule draws across and `label` (with an optional Arabic `ar`) appears */
+  | { id: string; units: number; cut: true; label: string; ar?: string };
 
 interface Props {
   sources: Record<string, { dir: string; prefix: string; count: number; ext?: string }>;
@@ -56,6 +58,8 @@ interface Props {
   headerOffset?: number;
   /** Elements inside each band section that the entrance animation moves */
   items?: string;
+  /** Bleed layout: paint a gradient of this colour under the copy column on wide frames (landscape), for legible copy */
+  scrim?: { color: string };
   /** Content after the film; the film hides once this reaches 60% up the viewport */
   release?: string;
   /** Fixed header that gets .solid once the film is released */
@@ -75,6 +79,7 @@ const {
   radius = 16,
   headerOffset = 84,
   items = ".beat-index, .beat-heading, .beat-body, .stats-hero, .stat",
+  scrim,
   release = ".page-flow",
   header = ".site-header",
 } = Astro.props;
@@ -95,9 +100,11 @@ const config = {
   radius,
   headerOffset,
   items,
+  scrim,
   release,
   header,
 };
+const hasCuts = timeline.some((s) => "cut" in s);
 const vars = [
   `--film-runway: ${runway.desktop}vh`,
   `--film-runway-mobile: ${runway.mobile}vh`,
@@ -123,6 +130,7 @@ const vars = [
   )}
   <div class="band">
     <slot />
+    {hasCuts && <div class="film-cut" aria-hidden="true"><span class="rule"></span><span class="label"></span></div>}
   </div>
   <div class="film-runway"></div>
 </div>
@@ -181,7 +189,7 @@ const vars = [
 
   /* Text band. Film text column (desktop): the frame is anchored right,
      text sits on the solid ground to its left. */
-  :root { --film-text-col: clamp(20rem, 40vw, 36rem); }
+  :root { --film-text-col: clamp(20rem, 34vw, 30rem); }
   .band { position: fixed; inset: 0; z-index: 4; pointer-events: none; }
   .band-section {
     position: absolute; inset: 0;

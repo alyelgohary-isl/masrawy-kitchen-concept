@@ -1,10 +1,8 @@
 ---
-/* Mobile-only sticky bar: the three things a phone visitor came to do. */
-import { site, mapsUrl } from "../site.config";
-import { url } from "../lib/url";
+import { phoneHref, mapsUrl, orderUrl } from "../site.config";
 ---
 <nav class="action-bar" aria-label="Quick actions">
-  <a class="solid" href={site.cta.href} target="_blank" rel="noopener">Order</a>
-  <a href={url("reserve/")}>Reserve</a>
+  <a class="solid" href={orderUrl} target="_blank" rel="noopener">Order Online</a>
+  <a href={phoneHref}>Call</a>
   <a href={mapsUrl} target="_blank" rel="noopener">Directions</a>
 </nav>
