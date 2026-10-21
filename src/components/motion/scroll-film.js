@@ -16,6 +16,7 @@ document.querySelectorAll("[data-scroll-film]").forEach((root) => initScrollFilm
 
 function initScrollFilm(root, cfg) {
   const { radius, headerOffset } = cfg;
+  const bleed = cfg.layout === "bleed";   // film fills the viewport; square frames float on the ground, wide frames cover
   const ground = cfg.ground || getComputedStyle(document.body).backgroundColor;   // the card sits on the page ground
 
   /* ——— Film sources + timeline ———
@@ -70,12 +71,44 @@ function initScrollFilm(root, cfg) {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = Math.round(window.innerWidth * dpr);
     canvas.height = Math.round(window.innerHeight * dpr);
+    publishSquareRect();
   }
 
   /* Frame placement. The film is square; the page is not. On landscape
      screens the frame is anchored to the right and the text lives on the
      solid ground to its left. On portrait screens it sits in the lower part
      of the viewport under the text. No blur, no feathering: a clean card. */
+  /* Bleed layout. One scale and one anchor for every frame, so a cut between a wide
+     clip and a square clip never moves the subject: the "square" is the centre square
+     of a 16:9 frame. Landscape: the square is sized to cover the viewport with a 16:9
+     frame (never smaller than the viewport height, capped so ultra-wide screens crop
+     the square by at most 25%), its centre sits at 56% of the width (copy lives in
+     the left margin) and the whole thing is clamped so a wide frame never leaves a
+     gap. Wide frames are drawn at that scale; square frames occupy the centre square
+     and float on the ground. Portrait: the centre square goes in the bottom card. */
+  function bleedRect(iw, ih) {
+    const cw = canvas.width, ch = canvas.height;
+    const landscape = cw > ch * 1.05;
+    if (!landscape) {
+      const size = Math.min(cw * 0.94, ch * 0.38);
+      return { dx: (cw - size) / 2, dy: ch - size - ch * 0.03, dw: size, dh: size, crop: true };
+    }
+    const S = Math.min(Math.max(ch, cw * 9 / 16), ch * 1.25);   // the square's size on screen
+    const W = S * 16 / 9;                                        // a 16:9 frame at that scale
+    let wx = cw * 0.56 - W / 2;
+    wx = W >= cw ? Math.min(0, Math.max(cw - W, wx)) : Math.max(0, Math.min(cw - W, wx));
+    const wy = (ch - S) / 2;
+    const sx = wx + (W - S) / 2;
+    if (iw > ih * 1.2) return { dx: wx, dy: wy, dw: W, dh: S, crop: false, square: false };
+    return { dx: sx, dy: wy, dw: S, dh: S, crop: false, square: true };
+  }
+  function publishSquareRect() {
+    const r = bleedRect(1, 1);
+    const el = root.querySelector(".band") || root;
+    el.style.setProperty("--card-x", r.dx / dpr + "px");
+    el.style.setProperty("--card-y", r.dy / dpr + "px");
+    el.style.setProperty("--card-size", r.dw / dpr + "px");
+  }
   function frameRect() {
     const cw = canvas.width, ch = canvas.height;
     const landscape = cw > ch * 1.05;
@@ -107,6 +140,28 @@ function initScrollFilm(root, cfg) {
     const cw = canvas.width, ch = canvas.height;
     ctx.fillStyle = ground;
     ctx.fillRect(0, 0, cw, ch);
+    if (bleed) {
+      const iw = img.naturalWidth, ih = img.naturalHeight;
+      const r = bleedRect(iw, ih);
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      if (r.crop) {
+        const s = Math.min(iw, ih);
+        ctx.drawImage(img, (iw - s) / 2, (ih - s) / 2, s, s, r.dx, r.dy, r.dw, r.dh);
+      } else {
+        ctx.drawImage(img, r.dx, r.dy, r.dw, r.dh);
+        if (r.square) {
+          // square frame floating on the ground: feather its sides so the edge never reads
+          const f = r.dw * 0.03;
+          for (const [x0, x1] of [[r.dx, r.dx + f], [r.dx + r.dw, r.dx + r.dw - f]]) {
+            const g = ctx.createLinearGradient(x0, 0, x1, 0);
+            g.addColorStop(0, ground); g.addColorStop(1, "rgba(0,0,0,0)");
+            ctx.fillStyle = g; ctx.fillRect(Math.min(x0, x1), r.dy, Math.abs(x1 - x0), r.dh);
+          }
+        }
+      }
+      return;
+    }
     const { dx, dy, dw, dh } = frameRect();
     ctx.save();
     roundedPath(dx, dy, dw, dh, radius * dpr);
@@ -270,7 +325,8 @@ function initScrollFilm(root, cfg) {
           }
         }
       } else if (s.classList.contains("is-active")) {
-        st.tl.timeScale(1.8).reverse();
+        if (st.tl.duration() === 0) s.classList.remove("is-active");   // no tween to reverse
+        else st.tl.timeScale(1.8).reverse();
         if (st.hasCounters) st.countersFired = false;
       }
     });

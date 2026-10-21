@@ -1,5 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import ScrubHero from "@/components/ScrubHero.astro";
 import { site, phone, phoneHref, address, hours, brunchHours, mapsUrl, mapsEmbed, orderUrl } from "@/site.config";
 import { url, absolute } from "@/lib/url";
 
@@ -31,16 +32,12 @@ const schema = [
   schema={schema}
 >
 <main class="page">
-  <section class="page-hero">
-    <div class="wrap">
-      <div>
-        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>Contact</nav>
-        <span class="ar-mark" lang="ar">اتصل بنا</span>
-        <h1>Britannia Road West, <em>two minutes off the 401.</em></h1>
-        <p class="lede">Open every day from ten. Call for tables of eight or more; everyone else, come on in.</p>
-      </div>
-    </div>
-  </section>
+  <ScrubHero id="tea-scrub" frames="frames/tea/te_" poster="assets/img/tea-pour-sq.webp" square label="Tea poured into a glass at Masrawy" hint="Scroll">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>Contact</nav>
+    <span class="ar-mark" lang="ar">اتصل بنا</span>
+    <h1>Britannia Road West, <em>two minutes off the 401.</em></h1>
+    <p class="lede">Open every day from ten. Call for tables of eight or more; everyone else, come on in.</p>
+  </ScrubHero>
 
   <section class="section no-top">
     <div class="wrap visit">

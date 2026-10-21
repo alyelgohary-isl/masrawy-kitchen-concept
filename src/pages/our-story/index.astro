@@ -1,5 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import ScrubHero from "@/components/ScrubHero.astro";
 import { url, absolute } from "@/lib/url";
 
 const press = [
@@ -29,17 +30,13 @@ const schema = [
   schema={schema}
 >
 <main class="page">
-  <section class="page-hero has-photo">
-    <div class="wrap">
-      <div>
-        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>Our Story</nav>
-        <span class="ar-mark" lang="ar">حكايتنا</span>
-        <h1>Masrawy means <em>"Egyptian".</em> Just that.</h1>
-        <p class="lede">Mohamed Salah Saleh was born in Saudi Arabia to Egyptian parents and grew up in Mississauga, where the food that mattered was his mother's. He worked in PR and marketing, then decided the community needed a place of its own.</p>
-      </div>
-      <div class="hero-photo round"><img src={url("assets/img/coffee-pour.webp")} alt="Egyptian coffee poured from a kanaka into a cup" loading="eager" /></div>
-    </div>
-  </section>
+  <ScrubHero id="khan-scrub" frames="frames/khan/kh_" poster="assets/img/khan-alley.webp" label="A lantern-lit lane in Khan El-Khalili that becomes the Masrawy dining room" hint="Scroll from Cairo to Mississauga"
+    marks={[{ at: 0, text: "Khan El-Khalili, Cairo" }, { at: 0.9, text: "Britannia Road, Mississauga" }]}>
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>Our Story</nav>
+    <span class="ar-mark" lang="ar">حكايتنا</span>
+    <h1>Masrawy means <em>"Egyptian".</em> Just that.</h1>
+    <p class="lede">Mohamed Salah Saleh was born in Saudi Arabia to Egyptian parents and grew up in Mississauga, where the food that mattered was his mother's. He worked in PR and marketing, then decided the community needed a place of its own.</p>
+  </ScrubHero>
 
   <section class="section no-top">
     <div class="wrap-narrow">

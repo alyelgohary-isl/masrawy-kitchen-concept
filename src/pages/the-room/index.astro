@@ -1,10 +1,12 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import ScrubHero from "@/components/ScrubHero.astro";
 import { site, phone, phoneHref } from "@/site.config";
 import { url, absolute } from "@/lib/url";
 
 const photos = [
-  { img: "room-main", alt: "The main dining room with string lights, beams and patterned tile", cap: "The main room" },
+  { img: "room-night", alt: "The main dining room at night: lanterns on the tables, string bulbs lit, blue hour in the windows", cap: "The main room at lantern hour" },
+  { img: "room-main", alt: "The main dining room with string lights, beams and patterned tile", cap: "The main room at noon" },
   { img: "room-mashrabiya", alt: "Mashrabiya screen, back-lit", cap: "Mashrabiya screens divide the rooms" },
   { img: "room-private", alt: "The semi-private room: tufted booths under the arabesque wall", cap: "The semi-private room" },
   { img: "room-booths", alt: "Booths under the arabesque wall", cap: "Booths under the arabesque wall" },
@@ -29,17 +31,14 @@ const schema = [
   schema={schema}
 >
 <main class="page">
-  <section class="page-hero">
-    <div class="wrap">
-      <div>
-        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>The Room</nav>
-        <span class="ar-mark" lang="ar">الصالة</span>
-        <h1>A room that feels like <em>Cairo</em>, built for a crowd.</h1>
-        <p class="lede">Mohamed designed Masrawy to feel like a bustling market, a nod to Khan El-Khalili: mashrabiya screens, arabesque walls, clay pottery and wood under exposed beams and warm bulbs. Sixty seats in the main room, and a semi-private room for thirty that closes off for your own party.</p>
-        <div class="hero-ctas"><a class="btn btn-solid" href="#book">Book the room</a><a class="btn btn-dark" href={url("catering/")}>Catering off-site</a></div>
-      </div>
-    </div>
-  </section>
+  <ScrubHero id="night-scrub" frames="frames/night/ni_" poster="assets/img/room-main.webp" label="The Masrawy dining room from lunch to dinner service" hint="Scroll from lunch to lantern hour"
+    marks={[{ at: 0, text: "Noon" }, { at: 0.35, text: "Afternoon" }, { at: 0.7, text: "Blue hour" }, { at: 0.92, text: "Lantern hour" }]}>
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>The Room</nav>
+    <span class="ar-mark" lang="ar">الصالة</span>
+    <h1>A room that feels like <em>Cairo</em>, built for a crowd.</h1>
+    <p class="lede">Mashrabiya screens, arabesque walls, clay pottery and wood under exposed beams and warm bulbs. Sixty seats in the main room, and a semi-private room for thirty that closes off for your own party.</p>
+    <div class="hero-ctas"><a class="btn btn-solid" href="#book">Book the room</a><a class="btn btn-ghost" href={url("catering/")}>Catering off-site</a></div>
+  </ScrubHero>
 
   <section class="section no-top">
     <div class="gallery-grid wrap">

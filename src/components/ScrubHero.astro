@@ -1,0 +1,29 @@
+---
+/* ScrubHero: an inner-page hero the visitor scrolls through. A sticky, full-viewport canvas
+   scrubs a generated frame sequence (wide or square) while the page copy sits over it.
+   Marks (data-at) light up as the scrub passes them, for layer names or a time-of-day dial. */
+import ScrollScrub from "./motion/ScrollScrub.astro";
+import { url } from "../lib/url";
+
+interface Props {
+  id: string;
+  frames: string;          // "frames/koshary/ko_"
+  count?: number;
+  poster: string;          // "assets/img/koshary.webp"
+  square?: boolean;
+  label: string;           // aria-label for the canvas
+  marks?: { at: number; text: string }[];
+  hint?: string;
+}
+const { id, frames, count = 61, poster, square = false, label, marks = [], hint = "Scroll" } = Astro.props;
+---
+<div class="scrub-runway" id={id}>
+  <section class={`scrub-hero${square ? " square" : ""}`}>
+    <ScrollScrub frames={frames} count={count} poster={url(poster)} runway={`#${id}`} role="img" aria-label={label} />
+    <div class="wrap">
+      <slot />
+      {marks.length > 0 && <ol class="dial" aria-hidden="true">{marks.map((m) => <li data-at={m.at}>{m.text}</li>)}</ol>}
+    </div>
+    <span class="scrub-hint">{hint}</span>
+  </section>
+</div>

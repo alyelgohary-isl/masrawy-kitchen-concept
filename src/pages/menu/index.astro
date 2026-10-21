@@ -1,5 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import ScrubHero from "@/components/ScrubHero.astro";
 import { site, orderUrl, phone, phoneHref } from "@/site.config";
 import { url, absolute, SITE_URL } from "@/lib/url";
 import { dineIn, type Item } from "@/data/menu";
@@ -46,18 +47,14 @@ const schema = [
   schema={schema}
 >
 <main class="page">
-  <section class="page-hero has-photo">
-    <div class="wrap">
-      <div>
-        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>Menu</nav>
-        <span class="ar-mark" lang="ar">المنيو</span>
-        <h1>The menu, <em>with prices.</em></h1>
-        <p class="lede">Egyptian soul food, dine-in or take-out. Everything is 100% halal; the beef is grass-fed and local, the chicken corn-fed, the fish wild. Vegan dishes are marked.</p>
-        <div class="hero-ctas"><a class="btn btn-solid" href={orderUrl} target="_blank" rel="noopener">Order for pick-up</a><a class="btn btn-dark" href={url("brunch/")}>Brunch menu</a></div>
-      </div>
-      <div class="hero-photo"><img src={url("assets/img/spread-grill.webp")} alt="A Masrawy mixed grill spread with rice, dips and bread" loading="eager" /></div>
-    </div>
-  </section>
+  <ScrubHero id="koshary-scrub" frames="frames/koshary/ko_" poster="assets/img/koshary-sq.webp" square label="Koshary being built layer by layer, from an empty bowl to the finished dish" hint="Scroll to build it"
+    marks={[{ at: 0.1, text: "Rice & lentils" }, { at: 0.3, text: "Pasta" }, { at: 0.45, text: "Chickpeas" }, { at: 0.62, text: "Sauce" }, { at: 0.8, text: "Onions & dakka" }]}>
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>Menu</nav>
+    <span class="ar-mark" lang="ar">المنيو</span>
+    <h1>The menu, <em>with prices.</em></h1>
+    <p class="lede">Egyptian soul food, dine-in or take-out. Everything is 100% halal; the beef is grass-fed and local, the chicken corn-fed, the fish wild. Vegan dishes are marked.</p>
+    <div class="hero-ctas"><a class="btn btn-solid" href={orderUrl} target="_blank" rel="noopener">Order for pick-up</a><a class="btn btn-ghost" href={url("brunch/")}>Brunch menu</a></div>
+  </ScrubHero>
 
   <nav class="menu-nav" aria-label="Menu sections">
     <ul>{dineIn.map((s) => <li><a href={`#${s.id}`}>{s.title}</a></li>)}</ul>

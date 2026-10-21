@@ -1,5 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import ScrubHero from "@/components/ScrubHero.astro";
 import { site, phone, phoneHref } from "@/site.config";
 import { url, absolute } from "@/lib/url";
 import { corporate, privateCatering, cateringTerms } from "@/data/menu";
@@ -29,18 +30,13 @@ const schema = [
   schema={schema}
 >
 <main class="page">
-  <section class="page-hero has-photo">
-    <div class="wrap">
-      <div>
-        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>Catering</nav>
-        <span class="ar-mark" lang="ar">كاترينج</span>
-        <h1>Catering is where <em>Masrawy started.</em></h1>
-        <p class="lede">Before the restaurant there were four years of weddings, engagements and office lunches: Toronto's first professional Egyptian caterer, since 2014. Trays for family tables, per-person menus for the office, and a food truck for the company barbecue.</p>
-        <div class="hero-ctas"><a class="btn btn-solid" href="#quote">Get a quote</a><a class="btn btn-dark" href="#corporate">Corporate menu</a><a class="btn btn-dark" href="#private">Family and wedding trays</a></div>
-      </div>
-      <div class="hero-photo"><img src={url("assets/img/platter-hands.webp")} alt="Hands serving from a large catering platter" loading="eager" /></div>
-    </div>
-  </section>
+  <ScrubHero id="platter-scrub" frames="frames/platter/pl_" poster="assets/img/platter-carry.webp" label="A server carrying a platter of grilled meats through the dining room" hint="Scroll">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>Catering</nav>
+    <span class="ar-mark" lang="ar">كاترينج</span>
+    <h1>Catering is where <em>Masrawy started.</em></h1>
+    <p class="lede">Before the restaurant there were four years of weddings, engagements and office lunches: Toronto's first professional Egyptian caterer, since 2014. Trays for family tables, per-person menus for the office, and a food truck for the company barbecue.</p>
+    <div class="hero-ctas"><a class="btn btn-solid" href="#quote">Get a quote</a><a class="btn btn-ghost" href="#corporate">Corporate menu</a><a class="btn btn-ghost" href="#private">Family and wedding trays</a></div>
+  </ScrubHero>
 
   <section class="section no-top">
     <div class="wrap">
@@ -59,14 +55,14 @@ const schema = [
       <p class="ink-soft reveal" style="max-width:60ch;margin-top:12px">Minimum 10 of each item. Set-up available. All orders include disposable plates, cutlery, napkins and serving utensils.</p>
       {corporate.map((s) => (
         <section class="menu-section" id={`corp-${s.id}`}>
-          <div class="menu-head" style="border-bottom-color:var(--hair-light)"><h2 style="color:var(--cream)">{s.title}</h2>{s.price && <span class="pricing" style="color:var(--cream-soft)">{s.price}</span>}</div>
-          {s.note && <p class="menu-note" style="color:var(--cream-soft)">{s.note}</p>}
+          <div class="menu-head" style="border-bottom-color:var(--hair-light)"><h2 style="color:var(--ivory)">{s.title}</h2>{s.price && <span class="pricing" style="color:var(--ivory-soft)">{s.price}</span>}</div>
+          {s.note && <p class="menu-note" style="color:var(--ivory-soft)">{s.note}</p>}
           <div class="menu-items">
             {s.items.map((i) => (
               <div class="menu-item" style="border-bottom-color:var(--hair-light)">
-                <div class="names"><h3 style="color:var(--cream)">{i.name}</h3>{i.ar && <span class="ar" lang="ar" style="color:var(--brass-2)">{i.ar}</span>}{i.tags?.map((t) => <span class={tagClass(t)} style="border-color:var(--hair-light);color:var(--cream-soft)">{t}</span>)}</div>
+                <div class="names"><h3 style="color:var(--ivory)">{i.name}</h3>{i.ar && <span class="ar" lang="ar" style="color:var(--brass-2)">{i.ar}</span>}{i.tags?.map((t) => <span class={tagClass(t)} style="border-color:var(--hair-light);color:var(--ivory-soft)">{t}</span>)}</div>
                 <span class="price" style="color:var(--brass-2)">{i.price ?? ""}</span>
-                {i.desc && <p style="color:var(--cream-soft)">{i.desc}</p>}
+                {i.desc && <p style="color:var(--ivory-soft)">{i.desc}</p>}
               </div>
             ))}
           </div>
@@ -92,7 +88,7 @@ const schema = [
     </div>
   </section>
 
-  <section class="band">
+  <section class="photo-band">
     <img src={url("assets/img/food-truck-crowd.webp")} alt="A crowd at the Masrawy food truck at an outdoor event" loading="lazy" />
     <div class="wrap"><h2><span class="ar" lang="ar">عربية أكل</span>The food truck.</h2><p>An Egyptian street-food experience for company barbecues and outdoor events, for any number of guests. Your menu or chef's choice.</p><a class="btn btn-ghost" href="#quote">Ask about the truck</a></div>
   </section>

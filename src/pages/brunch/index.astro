@@ -1,5 +1,6 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import ScrubHero from "@/components/ScrubHero.astro";
 import { orderUrl, brunchHours } from "@/site.config";
 import { url, absolute, SITE_URL } from "@/lib/url";
 import { brunch } from "@/data/menu";
@@ -29,18 +30,13 @@ const schema = [
   schema={schema}
 >
 <main class="page">
-  <section class="page-hero has-photo">
-    <div class="wrap">
-      <div>
-        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>Brunch</nav>
-        <span class="ar-mark" lang="ar">فطار</span>
-        <h1>Egyptian breakfast, <em>every day until two.</em></h1>
-        <p class="lede">Ful and tamaaya the way Cairo eats them at 10am, eggs scrambled with basterma, and feteer pulled apart with honey. Served {brunchHours}.</p>
-        <div class="hero-ctas"><a class="btn btn-solid" href={orderUrl} target="_blank" rel="noopener">Order for pick-up</a><a class="btn btn-dark" href={url("reserve/")}>Reserve for eight or more</a></div>
-      </div>
-      <div class="hero-photo"><img src={url("assets/img/feteer-honey.webp")} alt="Feteer with honey and molasses on a wooden table" loading="eager" /></div>
-    </div>
-  </section>
+  <ScrubHero id="feteer-scrub" frames="frames/feteer/fe_" poster="assets/img/feteer-honey-sq.webp" square label="Honey poured over feteer" hint="Scroll to pour">
+    <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>Brunch</nav>
+    <span class="ar-mark" lang="ar">فطار</span>
+    <h1>Egyptian breakfast, <em>every day until two.</em></h1>
+    <p class="lede">Ful and tamaaya the way Cairo eats them at 10am, eggs scrambled with basterma, and feteer pulled apart with honey. Served {brunchHours}.</p>
+    <div class="hero-ctas"><a class="btn btn-solid" href={orderUrl} target="_blank" rel="noopener">Order for pick-up</a><a class="btn btn-ghost" href={url("reserve/")}>Reserve for eight or more</a></div>
+  </ScrubHero>
 
   <div class="wrap">
     {brunch.map((s) => (
@@ -66,7 +62,7 @@ const schema = [
     <p class="micro" style="margin:28px 0 0">Prices from the current breakfast menu; subject to applicable taxes and may change without notice.</p>
   </div>
 
-  <section class="band" style="margin-top:72px">
+  <section class="photo-band" style="margin-top:72px">
     <img src={url("assets/img/brunch-eggs.webp")} alt="Egyptian breakfast plates: eggs, ful, home fries and balady bread" loading="lazy" />
     <div class="wrap"><h2><span class="ar" lang="ar">صباح الخير</span>Saba7 el-kher.</h2><p>Ful, two tamaaya and two eggs with balady bread, home fries and feta mix. The plate most of the room orders.</p></div>
   </section>

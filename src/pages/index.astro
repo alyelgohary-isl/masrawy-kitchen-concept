@@ -1,18 +1,13 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import Sofra from "@/components/motion/Sofra.astro";
+import ScrollFilm from "@/components/motion/ScrollFilm.astro";
+import ScrollScrub from "@/components/motion/ScrollScrub.astro";
 import { site, hours, brunchHours, phone, phoneHref, address, mapsUrl, mapsEmbed, orderUrl } from "@/site.config";
 import { url } from "@/lib/url";
+import * as film from "@/data/film";
 import { signature } from "@/data/menu";
 
-const room = [
-  { img: "room-main", alt: "The main dining room at Masrawy: exposed beams, string lights and patterned tile", cap: "The main room", ar: "الصالة" },
-  { img: "room-mashrabiya", alt: "A carved mashrabiya screen lit from behind", cap: "Mashrabiya screen", ar: "مشربية", tall: true },
-  { img: "room-private", alt: "The semi-private room with tufted booths under a patterned Egyptian wall", cap: "The semi-private room, seats 30", ar: "القاعة الخاصة" },
-  { img: "room-booths", alt: "Booth seating against the arabesque wall", ar: "أرابيسك", cap: "Booths under the arabesque wall", tall: true },
-  { img: "room-counter", alt: "The counter and open kitchen pass", cap: "The counter", ar: "الكاونتر" },
-  { img: "room-gallery-wall", alt: "The gallery wall of framed Egyptian prints", cap: "The gallery wall", ar: "الحائط" },
-];
+const marquee = ["كشري", "حواوشي", "ملوخية", "فطير مشلتت", "كبدة إسكندراني", "مكرونة بشاميل", "محشي", "طعمية", "كنافة", "أم علي"];
 ---
 <Layout
   title="Masrawy Egyptian Kitchen | Egyptian Restaurant in Mississauga"
@@ -20,16 +15,80 @@ const room = [
   path=""
   variant="film"
 >
-  <Sofra
-    eyebrow="A Taste of Egypt · Mississauga"
-    heading="Egypt's table,<br>laid on <em>Britannia Road.</em>"
-    tagline="Egyptian soul food, cooked the way it is at home and served in a room that feels like Cairo. Dine in, take out, or let us cater."
-    hands={{ img: "hands-spread", alt: "Hands reaching across a shared Egyptian spread at Masrawy", heading: "Everything is for the middle of the table.", body: "Egyptian food is shared. Plates land, hands reach, and nobody orders just for themselves." }}
-    room={{ img: "room-main", alt: "The dining room at Masrawy Egyptian Kitchen", heading: "Sixty seats. One room that feels like Cairo.", body: "Exposed beams, hand-woven tapestries, a mashrabiya screen and a semi-private room for thirty." }}
-  />
+  <ScrollFilm sources={film.sources} timeline={film.timeline} preload={film.preload} overlay={film.overlay} marquee={film.marquee} layout={film.layout} ground={film.ground} items=".beat-index, .beat-heading, .beat-body, .beat-price, .stats-hero, .stat, .stats-ctas" loader={site.brand[1]}>
+    <section class="band-section hero-section is-active" id="top" data-seg="hero:0,screen:0.55" data-animation="hero">
+      <div class="hero-inner">
+        <span class="eyebrow">A Taste of Egypt · Mississauga</span>
+        <h1 class="hero-heading">
+          <span class="line"><span class="word">Egypt's</span> <span class="word">table,</span></span>
+          <span class="line"><span class="word">laid</span> <span class="word">on</span> <span class="word"><em>Britannia</em></span> <span class="word"><em>Road.</em></span></span>
+        </h1>
+        <p class="hero-tagline">Egyptian soul food, cooked the way it is at home, in a room that feels like Cairo after dark. Dine in, take out, or let us cater.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-solid" href={orderUrl} target="_blank" rel="noopener">Order online</a>
+          <a class="btn btn-ghost" href={url("reserve/")}>Reserve a table</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="band-section" data-seg="coffee:0.12,h2:0.9" data-animation="slide-left">
+      <div class="beat-copy">
+        <span class="beat-index">One · <span class="ar" lang="ar">أهلاً</span></span>
+        <h2 class="beat-heading">You're a guest before you're a customer.</h2>
+        <p class="beat-body">Coffee from the kanaka, tea in a glass, bread on the table before you've ordered. Hospitality is the first course.</p>
+      </div>
+    </section>
+
+    <section class="band-section" data-seg="koshary:0.1,h3:0.95" data-animation="fade-up">
+      <div class="beat-copy">
+        <span class="beat-index">Two · <span class="ar" lang="ar">كشري</span></span>
+        <h2 class="beat-heading">Koshary, built the way Cairo builds it.</h2>
+        <p class="beat-body">Rice, lentils, pasta and chickpeas, spiced tomato sauce, fried onions, a splash of dakka. The dish TikTok keeps filming.</p>
+        <span class="beat-price">$13 · vegan</span>
+      </div>
+    </section>
+
+    <section class="band-section" data-seg="tahina:0.1,h4:0.95" data-animation="slide-left">
+      <div class="beat-copy">
+        <span class="beat-index">Three · <span class="ar" lang="ar">مشويات</span></span>
+        <h2 class="beat-heading">Grass-fed beef, charcoal, tahina.</h2>
+        <p class="beat-body">Kofta and kabab off the grill, kebda Eskandarani seared with chilli, hawawshi baked inside balady bread.</p>
+        <span class="beat-price">Kofta $20 · Beef kabab $27 · Hawaoshi $24</span>
+      </div>
+    </section>
+
+    <section class="band-section" data-seg="hands:0.1,h5:0.95" data-animation="fade-up">
+      <div class="beat-copy">
+        <span class="beat-index">Four · <span class="ar" lang="ar">سفرة</span></span>
+        <h2 class="beat-heading">Everything is for the middle of the table.</h2>
+        <p class="beat-body">Egyptian food is shared. Plates land, hands reach, and nobody orders just for themselves.</p>
+      </div>
+    </section>
+
+    <section class="band-section stats-section" data-seg="night:0.7,end:1" data-animation="stagger-up">
+      <div class="stats-hero">
+        <span class="beat-index">Five · <span class="ar" lang="ar">الصالة</span></span>
+        <h2 class="beat-heading">Sixty seats. One room that feels like Cairo.</h2>
+      </div>
+      <div class="stats-grid">
+        <div class="stat"><span class="stat-number" data-value="60" data-decimals="0">0</span><span class="stat-label">seats</span></div>
+        <div class="stat"><span class="stat-number" data-value="30" data-decimals="0">0</span><span class="stat-label">in the semi-private room</span></div>
+        <div class="stat"><span class="stat-number" data-value="2014" data-static>2014</span><span class="stat-label">catering across the GTA since</span></div>
+      </div>
+      <div class="hero-ctas stats-ctas">
+        <a class="btn btn-solid" href={url("reserve/")}>Reserve a table</a>
+        <a class="btn btn-ghost" href={url("the-room/")}>See the room</a>
+      </div>
+    </section>
+  </ScrollFilm>
 
   <main class="page-flow">
-    <section class="section" id="doors">
+    <span class="flow-anchor" id="flow"></span>
+
+    <section class="section doors-section" id="doors">
+      <div class="glow-lantern" aria-hidden="true">
+        <video autoplay muted loop playsinline preload="metadata" poster={url("assets/loops/lantern.webp")}><source src={url("assets/loops/lantern.mp4")} type="video/mp4" /></video>
+      </div>
       <div class="wrap">
         <div class="doors">
           <a class="door reveal" href={orderUrl} target="_blank" rel="noopener"><h3>Order online<span class="ar" lang="ar">اطلب</span></h3><p>Pick-up from Britannia Road, ready when you are. Open until 10 Sunday to Thursday, until 11 Friday and Saturday.</p><span class="arrow">→</span></a>
@@ -39,20 +98,7 @@ const room = [
       </div>
     </section>
 
-    <section class="section no-top" id="room">
-      <div class="wrap statement">
-        <h2 class="reveal">Built to feel like <em>Khan El-Khalili</em>, two minutes off the 401.</h2>
-        <div class="reveal">
-          <p>The room is the part of Masrawy you can't take home. Mashrabiya screens, arabesque walls, clay pottery and wood under exposed beams and warm bulbs. Sixty seats, plus a semi-private space for thirty that books out for engagement parties and team dinners.</p>
-          <p><a class="btn btn-dark" style="margin-top:18px" href={url("the-room/")}>The room and private events</a></p>
-        </div>
-      </div>
-      <div class="strip">
-        {room.map((r) => (
-          <figure class={r.tall ? "tall" : undefined}><img src={url(`assets/img/${r.img}.webp`)} alt={r.alt} loading="lazy" /><figcaption><span>{r.cap}</span><span class="ar" lang="ar">{r.ar}</span></figcaption></figure>
-        ))}
-      </div>
-    </section>
+    <div class="marquee" aria-hidden="true"><div class="marquee-track">{[...marquee, ...marquee].map((m) => <span class="ar" lang="ar">{m}</span>)}</div></div>
 
     <section class="section" id="signature">
       <div class="wrap">
@@ -61,26 +107,43 @@ const room = [
             <span class="eyebrow">Signature dishes</span>
             <h2>The ones people drive in for.</h2>
           </div>
-          <a class="btn btn-dark reveal" href={url("menu/")}>Full menu</a>
+          <a class="btn btn-ghost reveal" href={url("menu/")}>Full menu with prices</a>
         </div>
-        <div class="sig-list">
+        <div class="sig-list" data-peek>
           {signature.map((d) => (
-            <a class="sig-row reveal" href={url(d.slug === "lentil" || d.slug === "brunch" ? (d.slug === "brunch" ? "brunch/" : "menu/#soups") : `dishes/${d.slug}/`)}>
-              <img src={url(`assets/img/${d.img}.webp`)} alt="" loading="lazy" width="96" height="96" />
-              <div><div class="names"><h3>{d.name}</h3><span class="ar" lang="ar">{d.ar}</span></div><p>{d.desc}</p></div>
+            <a class="sig-row reveal" href={url(d.slug === "lentil" ? "menu/#soups" : d.slug === "brunch" ? "brunch/" : `dishes/${d.slug}/`)} data-img={url(`assets/img/${d.img}.webp`)}>
+              <span class="ar" lang="ar">{d.ar}</span>
+              <div><h3>{d.name}</h3><p>{d.desc}</p></div>
               <span class="price">{d.price}</span>
             </a>
           ))}
         </div>
-        <p class="micro" style="margin-top:14px">All prices from the current dine-in and brunch menus. 100% halal. Prices subject to change.</p>
+        <img class="peek" alt="" aria-hidden="true" />
       </div>
     </section>
 
-    <section class="band" id="brunch">
+    <div class="scrub-runway" id="room-scrub">
+      <section class="room-scrub">
+        <div class="room-canvas">
+          <ScrollScrub frames="frames/night/ni_" count={61} poster={url("assets/img/room-main.webp")} runway="#room-scrub" role="img" aria-label="The Masrawy dining room from lunch to dinner service" />
+        </div>
+        <div class="room-copy">
+          <span class="eyebrow">The room</span>
+          <h2>Lunch to <em>lantern hour.</em></h2>
+          <p>Mashrabiya screens, arabesque walls, clay pottery and wood under exposed beams. Built to feel like Khan El-Khalili, two minutes off the 401.</p>
+          <ol class="dial" aria-hidden="true">
+            <li data-at="0">Noon</li><li data-at="0.35">Afternoon</li><li data-at="0.7">Blue hour</li><li data-at="0.92">Lantern hour</li>
+          </ol>
+          <a class="btn btn-ghost" href={url("the-room/")}>The room and private events</a>
+        </div>
+      </section>
+    </div>
+
+    <section class="photo-band" id="brunch">
       <img src={url("assets/img/spread-brunch.webp")} alt="A Masrawy brunch spread: eggs, ful, tamaaya, bread and salads" loading="lazy" />
       <div class="wrap">
         <h2><span class="ar" lang="ar">فطار</span>Brunch, every day, ten to two.</h2>
-        <p>Basterma and eggs, ful in a tajin, tamaaya baked around boiled eggs, and Sweet Cleopatra feteer with molasses and honey. Egyptian breakfast with a few Canadian habits.</p>
+        <p>Basterma and eggs, ful in a tajin, tamaaya baked around boiled eggs, and Sweet Cleopatra feteer with molasses and honey.</p>
         <a class="btn btn-ghost" href={url("brunch/")}>See the brunch menu</a>
       </div>
     </section>
@@ -89,12 +152,12 @@ const room = [
       <div class="wrap">
         <span class="eyebrow reveal">Catering since 2014</span>
         <p class="reveal">Toronto's first professional Egyptian caterer. We've fed weddings and iftars, <em>Amazon, Microsoft, KPMG and P&amp;G</em>, and the cast of Suits.</p>
-        <!-- CONFIRM: client list as the client is happy to state it publicly (source: dobbernationloves.com and tastetoronto.com profiles) -->
-        <div class="hero-ctas reveal" style="justify-content:center"><a class="btn btn-dark" href={url("catering/")}>Catering menus</a><a class="btn btn-dark" href={url("catering/#quote")}>Get a quote</a></div>
+        <!-- CONFIRM: client list as the client is happy to state it publicly -->
+        <div class="hero-ctas reveal" style="justify-content:center"><a class="btn btn-ghost" href={url("catering/")}>Catering menus</a><a class="btn btn-solid" href={url("catering/#quote")}>Get a quote</a></div>
       </div>
     </section>
 
-    <section class="section paper" id="visit">
+    <section class="section" id="visit">
       <div class="wrap visit">
         <div class="reveal">
           <h2>Find us.</h2>
@@ -102,8 +165,8 @@ const room = [
             {hours.map((h) => <tr><td>{h.days}</td><td>{h.open} – {h.close}</td></tr>)}
             <tr><td>Brunch</td><td>{brunchHours}</td></tr>
           </table>
-          <p class="ink-soft" style="margin-top:18px">{address.street}, {address.city}, {address.region} {address.postal}. 100% halal. Vegetarian and vegan options across the menu. Summer patio.</p><!-- CONFIRM: parking details, if the client wants them stated -->
-          <div class="hero-ctas"><a class="btn btn-dark" href={phoneHref}>Call {phone}</a><a class="btn btn-dark" href={mapsUrl} target="_blank" rel="noopener">Get directions</a></div>
+          <p class="ink-soft" style="margin-top:18px">{address.street}, {address.city}, {address.region} {address.postal}. 100% halal. Vegetarian and vegan options across the menu. Summer patio.</p>
+          <div class="hero-ctas"><a class="btn btn-ghost" href={phoneHref}>Call {phone}</a><a class="btn btn-ghost" href={mapsUrl} target="_blank" rel="noopener">Get directions</a></div>
         </div>
         <iframe class="map reveal" src={mapsEmbed} title={`Map to ${site.name}`} loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
       </div>

@@ -46,6 +46,10 @@ interface Props {
   length?: { desktop: number; mobile: number };
   /** Colour around the film card; defaults to the page background */
   ground?: string;
+  /** "card" (default): square card anchored right under the header. "bleed": the film fills the viewport;
+      frames are fitted to its height, wide frames cover, square frames float on `ground` with feathered sides.
+      Either way the square frame's rectangle is published as --card-x/--card-y/--card-size on .band for overlays. */
+  layout?: "card" | "bleed";
   /** Corner radius of the film card, css px */
   radius?: number;
   /** Space kept clear above the card on landscape screens (a fixed header), css px */
@@ -67,6 +71,7 @@ const {
   marquee,
   length,
   ground,
+  layout = "card",
   radius = 16,
   headerOffset = 84,
   items = ".beat-index, .beat-heading, .beat-body, .stats-hero, .stat",
@@ -86,6 +91,7 @@ const config = {
   overlay: overlay && { max: 0.9, fade: 0.03, ...overlay },
   marquee: marquee && { enter: marquee.enter, leave: marquee.leave },
   ground,
+  layout,
   radius,
   headerOffset,
   items,
@@ -98,7 +104,7 @@ const vars = [
   overlay?.color && `--film-overlay: ${overlay.color}`,
 ].filter(Boolean).join("; ");
 ---
-<div class="scroll-film" data-scroll-film data-config={JSON.stringify(config)} style={vars}>
+<div class={`scroll-film layout-${layout}`} data-scroll-film data-config={JSON.stringify(config)} style={vars}>
   {loader && (
     <div class="film-loader" aria-hidden="true">
       <div class="loader-inner">
