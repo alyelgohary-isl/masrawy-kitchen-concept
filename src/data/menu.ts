@@ -261,7 +261,7 @@ export const cateringTerms = [
 export const signature = [
   { slug: "macarona-bechamel", name: "Macarona bechamel", ar: "مكرونة بشاميل", desc: "Penne, seasoned beef and béchamel under Canadian cheddar, brought to the table in a clay pot.", price: "$18", layer: "layer-bechamel", img: "macarona-bechamel", x: "36%", y: "34%", w: "30%" },
   { slug: "koshary", name: "Koshary", ar: "كشري", desc: "Rice, lentils, pasta and chickpeas under spiced tomato sauce, fried onions and a splash of dakka.", price: "$13", layer: "layer-koshary", img: "koshary", x: "66%", y: "30%", w: "34%" },
-  { slug: "lentil", name: "3ats, lentil soup", ar: "شوربة عدس", desc: "Red lentils, Egyptian spices, crispy pita chips and fried onions.", price: "$8", layer: "layer-lentil", img: "lentil-soup", x: "22%", y: "68%", w: "24%" },
+  { slug: "lentil", name: "Lentil soup", ar: "شوربة عدس", desc: "Red lentils, Egyptian spices, crispy pita chips and fried onions.", price: "$8", layer: "layer-lentil", img: "lentil-soup", x: "22%", y: "68%", w: "24%" },
   { slug: "tamaaya", name: "Kobebah", ar: "كبيبة", desc: "Seasoned beef and nuts in a bulgur shell, with balady bread.", price: "$10", layer: "layer-kobebah", img: "kobebah", x: "50%", y: "62%", w: "28%" },
   { slug: "feteer", name: "Sweet Cleopatra feteer", ar: "فطير مشلتت", desc: "Layered Egyptian pastry with molasses and tahina, or honey. Brunch, every day until two.", price: "$17.25", layer: "layer-feteer", img: "feteer-honey", x: "80%", y: "66%", w: "30%" },
   { slug: "brunch", name: "Basterma balady", ar: "بيض بالبسطرمة", desc: "Three eggs scrambled with cured beef, home fries, feta mix and balady bread.", price: "$17.25", layer: "layer-brunch", img: "brunch-plate", x: "88%", y: "22%", w: "20%" },
