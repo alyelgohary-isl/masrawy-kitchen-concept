@@ -40,8 +40,8 @@ export const timeline: Segment[] = [
 /* Frames loaded before the loader lifts; the rest stream in scroll order */
 export const preload: Ref = ["screen", 24];
 
-/* Cream scrim the canvas paints under the copy column on wide frames (landscape only), so the copy stays ink on paper */
-export const scrim = { color: "#f1ebe1" };
+/* No scrim: wide-frame beats put their copy on a solid cream panel (.on-photo) so the photograph stays crisp */
+export const scrim = undefined;
 
 /* Full-bleed layout: the film fills the viewport; the page ground is the site's cream */
 export const layout = "bleed" as const;

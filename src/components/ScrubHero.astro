@@ -21,8 +21,10 @@ const { id, frames, count = 61, poster, square = false, label, marks = [], hint 
   <section class={`scrub-hero${square ? " square" : ""}`}>
     <ScrollScrub frames={frames} count={count} poster={url(poster)} runway={`#${id}`} role="img" aria-label={label} />
     <div class="wrap">
-      <slot />
-      {marks.length > 0 && <ol class="dial" aria-hidden="true">{marks.map((m) => <li data-at={m.at}>{m.text}</li>)}</ol>}
+      <div class="scrub-copy">
+        <slot />
+        {marks.length > 0 && <ol class="dial" aria-hidden="true">{marks.map((m) => <li data-at={m.at}>{m.text}</li>)}</ol>}
+      </div>
     </div>
     <span class="scrub-hint">{hint}</span>
   </section>

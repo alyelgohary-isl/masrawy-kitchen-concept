@@ -141,6 +141,10 @@ body.nav-open .nav-toggle span::after { top: 0; transform: rotate(-45deg); }
 .hero-tagline { margin-top: 22px; font-family: var(--font-display); font-size: clamp(1.15rem, 1.8vw, 1.5rem); line-height: 1.4; color: var(--ink-soft); }
 .hero-tagline span { display: block; }
 .beat-copy { max-width: 30rem; }
+/* wide-frame beats: the copy sits on a solid cream panel with a hairline edge; the photograph stays crisp around it */
+.band-section.on-photo .hero-inner, .band-section.on-photo .beat-copy { background: var(--cream); border: 1px solid var(--hair); padding: 30px 34px 32px; box-shadow: 0 24px 60px -30px rgba(35, 40, 47, 0.35); }
+.band-section.on-photo .hero-inner { padding: 36px 40px 40px; width: clamp(20rem, 42vw, 37rem); }
+@media (max-width: 860px) { .band-section.on-photo .hero-inner, .band-section.on-photo .beat-copy { background: none; border: 0; padding: 0; box-shadow: none; } }
 .beat-index { display: block; font-family: var(--font-arabic); font-size: clamp(1.6rem, 2.6vw, 2.2rem); line-height: 1; color: var(--gold); margin-bottom: 14px; }
 .beat-price { display: block; margin-top: 14px; font-family: var(--font-display); font-size: 1.1rem; color: var(--gold-2); }
 .beat-heading { font-size: clamp(1.8rem, 3.2vw, 2.8rem); color: var(--ink); }
@@ -190,26 +194,26 @@ body.nav-open .nav-toggle span::after { top: 0; transform: rotate(-45deg); }
 .scrub-hero { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1fr); align-items: end; isolation: isolate; }
 .scrub-hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -2; }
 .scrub-hero.square canvas { inset: auto; left: 62%; top: 50%; width: min(100vw, 100vh); height: min(100vw, 100vh); transform: translate(-50%, -50%); }
-.scrub-hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(241, 235, 225, 0.5), rgba(241, 235, 225, 0) 22%, rgba(241, 235, 225, 0) 36%, rgba(241, 235, 225, 0.78) 56%, rgba(241, 235, 225, 0.97) 72%), linear-gradient(90deg, rgba(241, 235, 225, 0.75), rgba(241, 235, 225, 0.4) 38%, rgba(241, 235, 225, 0) 64%); }
-.scrub-hero.square::before { background: linear-gradient(90deg, var(--cream) 30%, rgba(241, 235, 225, 0.6) 42%, transparent 58%), linear-gradient(180deg, var(--cream), transparent 20%, transparent 80%, var(--cream)); }
-.scrub-hero .wrap { padding-bottom: 72px; width: 100%; }
+.scrub-hero .wrap { padding-bottom: 56px; width: 100%; }
+.scrub-copy { background: var(--cream); border: 1px solid var(--hair); padding: 32px 36px 28px; max-width: 720px; box-shadow: 0 24px 60px -30px rgba(35, 40, 47, 0.35); }
+.scrub-hero.square .scrub-copy { max-width: 560px; }
+.scrub-copy .dial { margin-top: 22px; }
 .scrub-hero.square .wrap { align-self: center; padding-bottom: 0; }
-.scrub-hero h1 { font-size: clamp(2.6rem, 5.4vw, 5rem); max-width: 12em; }
+.scrub-hero h1 { font-size: clamp(2.4rem, 4.6vw, 4.2rem); max-width: 12em; }
 .scrub-hero.square h1 { max-width: 8.5em; }
 .scrub-hero.square .lede { max-width: 40ch; }
 .scrub-hero .lede { color: var(--ink-soft); max-width: 48ch; font-size: 1.1rem; margin-top: 16px; }
 .scrub-hero .ar-mark { display: block; font-size: clamp(2.2rem, 4.5vw, 3.6rem); color: var(--gold); line-height: 1; margin-bottom: 8px; }
 .scrub-hero .breadcrumbs { color: var(--ink-soft); }
-.scrub-hint { position: absolute; right: var(--gutter); bottom: 28px; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute); }
+.scrub-hint { position: absolute; right: var(--gutter); bottom: 28px; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); background: var(--cream); border: 1px solid var(--hair); padding: 6px 10px; }
 @media (max-width: 800px) {
   .scrub-runway { height: 260vh; }
-  .scrub-hero .wrap, .scrub-hero.square .wrap { align-self: end; padding-bottom: 110px; }
+  .scrub-hero .wrap, .scrub-hero.square .wrap { align-self: end; padding-bottom: 100px; }
+  .scrub-copy { padding: 22px 20px 18px; }
   .scrub-hero.square canvas { inset: auto; left: 50%; top: 36%; width: 100vw; height: 100vw; }
   .dial { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
   .dial li { font-size: 0.62rem; letter-spacing: 0.08em; padding: 8px 12px 8px 0; min-width: 0; }
-  .scrub-hero::before { background: linear-gradient(180deg, rgba(241, 235, 225, 0.4), rgba(241, 235, 225, 0.15) 30%, rgba(241, 235, 225, 0.85) 52%, rgba(241, 235, 225, 0.98) 64%); }
-  .scrub-hero.square::before { background: linear-gradient(180deg, rgba(241, 235, 225, 0.3), rgba(241, 235, 225, 0.3) 45%, rgba(241, 235, 225, 0.97) 65%); }
-}
+    }
 
 .statement { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: end; }
 .statement h2 { font-size: clamp(2rem, 4vw, 3.6rem); }
