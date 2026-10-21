@@ -5,7 +5,7 @@
    Provenance and prompts: work/beats.md and work/gen/kie.log. */
 
 export const sources = {
-  screen:  { dir: "frames/screen",  prefix: "sc_", count: 31 },  // only the first 2.5 s of the glide are used (and downloaded)   // C1 16:9: slow glide into the semi-private room toward the arabesque wall (from their photo H-21)
+  screen:  { dir: "frames/screen",  prefix: "sc_", count: 1 },   // the room, held as a still under the hero (the glide clip is on disk but not loaded)   // C1 16:9: slow glide into the semi-private room toward the arabesque wall (from their photo H-21)
   coffee:  { dir: "frames/coffee",  prefix: "cf_", count: 61 },   // C2 1:1: coffee pours from the kanaka, steam (from V-26); floats on the ground
   koshary: { dir: "frames/koshary", prefix: "ko_", count: 61 },   // C3 1:1: a ladle of tomato sauce poured over their koshary photo (V-09); replaced the "bowl builds" clip 2026-10-21
   tahina:  { dir: "frames/tahina",  prefix: "ta_", count: 61 },   // C4 1:1: tahina pours over kofta (from V-47)
@@ -17,9 +17,8 @@ type Ref = [keyof typeof sources, number];
 type Segment = { id: string; units: number } & ({ from: Ref; to: Ref } | { hold: Ref } | { cut: true; label?: string; ar?: string });
 
 export const timeline: Segment[] = [
-  { id: "hero",    units: 0.5,  hold: ["screen", 0] },                      // "A Taste of Egypt" over the lit room
-  { id: "screen",  units: 0.5,  from: ["screen", 0],  to: ["screen", 30] }, // a short glide toward the pattern
-  { id: "h1",      units: 0.15, hold: ["screen", 30] },
+  { id: "hero",    units: 0.7,  hold: ["screen", 0] },                      // "A Taste of Egypt" over the lit room, held
+  { id: "h1",      units: 0.15, hold: ["screen", 0] },
   { id: "c1",      units: 0.2,  cut: true },
   { id: "coffee",  units: 0.7,  from: ["coffee", 0],  to: ["coffee", 60] }, // coffee from the kanaka
   { id: "h2",      units: 0.2,  hold: ["coffee", 60] },
@@ -38,7 +37,7 @@ export const timeline: Segment[] = [
 ];
 
 /* Frames loaded before the loader lifts; the rest stream in scroll order */
-export const preload: Ref = ["screen", 24];
+export const preload: Ref = ["coffee", 12];   // the room still and the first second of the coffee pour
 
 /* No scrim: wide-frame beats put their copy on a solid cream panel (.on-photo) so the photograph stays crisp */
 export const scrim = undefined;

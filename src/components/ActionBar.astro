@@ -1,8 +1,11 @@
 ---
+/* Mobile-only sticky bar: menu, order, call, directions. */
 import { phoneHref, mapsUrl, orderUrl } from "../site.config";
+import { url } from "../lib/url";
 ---
 <nav class="action-bar" aria-label="Quick actions">
-  <a class="solid" href={orderUrl} target="_blank" rel="noopener">Order Online</a>
+  <a href={url("menu/")}>Menu</a>
+  <a class="solid" href={orderUrl} target="_blank" rel="noopener">Order</a>
   <a href={phoneHref}>Call</a>
   <a href={mapsUrl} target="_blank" rel="noopener">Directions</a>
 </nav>

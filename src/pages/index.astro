@@ -4,7 +4,7 @@
    masrawykitchen.com home page, word for word: Photo Gallery, Reviews, Restaurant Hours. */
 import Layout from "@/layouts/Layout.astro";
 import ScrollFilm from "@/components/motion/ScrollFilm.astro";
-import { site, phone, phoneHref, orderUrl } from "@/site.config";
+import { site, phone, phoneHref, orderUrl, social } from "@/site.config";
 import { url } from "@/lib/url";
 import * as film from "@/data/film";
 
@@ -34,7 +34,7 @@ const reviews = [
   variant="film"
 >
   <ScrollFilm sources={film.sources} timeline={film.timeline} preload={film.preload} scrim={film.scrim} layout={film.layout} ground={film.ground} items=".beat-index, .beat-heading, .beat-body, .beat-price, .hero-ctas" loader={site.brand[1]}>
-    <section class="band-section hero-section on-photo is-active" id="top" data-seg="hero:0,screen:0.55" data-animation="hero">
+    <section class="band-section hero-section on-photo is-active" id="top" data-seg="hero:0,hero:0.9" data-animation="hero">
       <div class="hero-inner">
         <h1 class="hero-heading">
           <span class="line"><span class="word">A</span> <span class="word">Taste</span></span>
@@ -112,7 +112,27 @@ const reviews = [
       </div>
     </section>
 
-    <section class="section paper" id="reviews">
+    <section class="section paper" id="story">
+      <div class="wrap">
+        <ol class="timeline story-grid">
+          <li class="reveal"><span class="year">2014</span><p>From within the community, our humble start began by renting space to cater unique, authentic, soulful Egyptian food to our city.</p></li>
+          <li class="reveal"><span class="year">2016</span><p>A bigger vision was born! Within the hustle of catering came incredible feedback and demand as we realized we had to expand to keep up!</p></li>
+          <li class="reveal"><span class="year">2018</span><p>“When will you open a restaurant?” You asked and we delivered! An authentic, contemporary take on Egyptian cuisine was born.</p></li>
+        </ol>
+        <blockquote class="quote reveal">“Masrawy Egyptian Kitchen is a modern, comfortable and authentic exploration of the diverse and uniquely Egyptian dishes that characterize our rich history. Nourishing, delicious and soulful, we hope this will be an experience that conjures up memories of Egypt and invites the curiosity of others to experience the hospitality and kindness that has characterized our culture for centuries”<cite>– Mohamed Saleh</cite></blockquote>
+      </div>
+    </section>
+
+    <section class="follow" id="follow">
+      <div class="wrap">
+        <p>Follow along</p>
+        <a href={social.instagram} target="_blank" rel="noopener"><span class="ar" lang="ar">إنستجرام</span> @masrawy_kitchen</a>
+        <a href={social.tiktok} target="_blank" rel="noopener"><span class="ar" lang="ar">تيك توك</span> @masrawy_kitchen</a>
+        <a href={social.facebook} target="_blank" rel="noopener">Facebook</a>
+      </div>
+    </section>
+
+    <section class="section" id="reviews">
       <div class="wrap">
         <div class="section-head reveal">
           <span class="eyebrow">Reviews</span>
