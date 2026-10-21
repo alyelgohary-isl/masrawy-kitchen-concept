@@ -164,9 +164,9 @@ function initScrollFilm(root, cfg) {
     const g = ctx.createLinearGradient(0, 0, edge * 1.35, 0);
     const c = cfg.scrim.color || ground;
     const rgba = (a) => c.startsWith("#") ? `rgba(${parseInt(c.slice(1, 3), 16)}, ${parseInt(c.slice(3, 5), 16)}, ${parseInt(c.slice(5, 7), 16)}, ${a})` : c;
-    g.addColorStop(0, rgba(0.97));
-    g.addColorStop(0.5, rgba(0.9));
-    g.addColorStop(0.74, rgba(0.45));
+    g.addColorStop(0, rgba(0.9));
+    g.addColorStop(0.5, rgba(0.8));
+    g.addColorStop(0.74, rgba(0.35));
     g.addColorStop(1, rgba(0));
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, edge * 1.35, ch);

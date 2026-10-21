@@ -1,8 +1,7 @@
 ---
-/* Home. The copy is the current masrawykitchen.com home page, word for word, in its order:
-   the slider line, Welcome and the menus, 2014 / 2016 / 2018, the founder's quote, the photo
-   gallery, the reviews, the restaurant hours and the call to action. The film runs under the
-   first six of those; the rest follow on the page. */
+/* Home. The film captions the dish on screen (their menu wording and prices where they have them);
+   the hero carries the current site's three buttons. Below the film the sections are the current
+   masrawykitchen.com home page, word for word: Photo Gallery, Reviews, Restaurant Hours. */
 import Layout from "@/layouts/Layout.astro";
 import ScrollFilm from "@/components/motion/ScrollFilm.astro";
 import { site, phone, phoneHref, orderUrl } from "@/site.config";
@@ -34,7 +33,7 @@ const reviews = [
   path=""
   variant="film"
 >
-  <ScrollFilm sources={film.sources} timeline={film.timeline} preload={film.preload} scrim={film.scrim} layout={film.layout} ground={film.ground} items=".beat-index, .beat-heading, .beat-body, .beat-quote p, .beat-quote cite, .hero-ctas" loader={site.brand[1]}>
+  <ScrollFilm sources={film.sources} timeline={film.timeline} preload={film.preload} scrim={film.scrim} layout={film.layout} ground={film.ground} items=".beat-index, .beat-heading, .beat-body, .beat-price, .hero-ctas" loader={site.brand[1]}>
     <section class="band-section hero-section is-active" id="top" data-seg="hero:0,screen:0.55" data-animation="hero">
       <div class="hero-inner">
         <h1 class="hero-heading">
@@ -43,17 +42,6 @@ const reviews = [
         </h1>
         <p class="hero-tagline"><span>Dine-in &nbsp;|&nbsp; Take-out</span><span>Event &nbsp;|&nbsp; Catering</span></p>
         <div class="hero-ctas">
-          <a class="btn btn-solid" href={orderUrl} target="_blank" rel="noopener">Order Online</a>
-          <a class="btn btn-ghost" href={url("catering/")}>Catering</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="band-section" data-seg="coffee:0.1,h2:0.95" data-animation="fade-up">
-      <div class="beat-copy">
-        <h2 class="beat-heading">Welcome</h2>
-        <p class="beat-body">Click to view our Dine-in &amp; Patio Menu!</p>
-        <div class="hero-ctas">
           <a class="btn btn-solid" href={url("menu/")}>Main Menu</a>
           <a class="btn btn-ghost" href={url("brunch/")}>Breakfast Menu</a>
           <a class="btn btn-ghost" href={orderUrl} target="_blank" rel="noopener">Order Pick-up</a>
@@ -61,32 +49,48 @@ const reviews = [
       </div>
     </section>
 
+    <section class="band-section" data-seg="coffee:0.1,h2:0.95" data-animation="fade-up">
+      <div class="beat-copy">
+        <span class="beat-index"><span class="ar" lang="ar">أهلاً</span></span>
+        <h2 class="beat-heading">Welcome</h2>
+        <p class="beat-body">Coffee from the kanaka before you've ordered, bread on the table, tea in a glass after. Hospitality is the first course.</p>
+      </div>
+    </section>
+
     <section class="band-section" data-seg="koshary:0.1,h3:0.95" data-animation="fade-up">
       <div class="beat-copy">
-        <span class="beat-index">2014</span>
-        <p class="beat-body">From within the community, our humble start began by renting space to cater unique, authentic, soulful Egyptian food to our city.</p>
+        <span class="beat-index"><span class="ar" lang="ar">كشري</span></span>
+        <h2 class="beat-heading">Koshary</h2>
+        <p class="beat-body">Rice, lentils, pasta, chickpeas, fried onions, spiced tomato sauce, dakka (garlic vinegar), hot sauce.</p>
+        <span class="beat-price">$13 · Vegan</span>
       </div>
     </section>
 
     <section class="band-section" data-seg="tahina:0.1,h4:0.95" data-animation="fade-up">
       <div class="beat-copy">
-        <span class="beat-index">2016</span>
-        <p class="beat-body">A bigger vision was born! Within the hustle of catering came incredible feedback and demand as we realized we had to expand to keep up!</p>
+        <span class="beat-index"><span class="ar" lang="ar">مشويات</span></span>
+        <h2 class="beat-heading">Kofta, off the charcoal</h2>
+        <p class="beat-body">Ground beef skewers, Egyptian spices, rice or fries, salata, tahina.</p>
+        <span class="beat-price">Kofta $20 · Beef Kabab $27 · Hawaoshi $24</span>
       </div>
     </section>
 
     <section class="band-section" data-seg="hands:0.1,h5:0.95" data-animation="fade-up">
       <div class="beat-copy">
-        <span class="beat-index">2018</span>
-        <p class="beat-body">“When will you open a restaurant?” You asked and we delivered! An authentic, contemporary take on Egyptian cuisine was born.</p>
+        <span class="beat-index"><span class="ar" lang="ar">سفرة</span></span>
+        <h2 class="beat-heading">Everything is for the middle of the table.</h2>
+        <p class="beat-body">Egyptian food is shared. Plates land, hands reach, and nobody orders just for themselves.</p>
+        <div class="hero-ctas"><a class="btn btn-solid" href={url("menu/")}>Main Menu</a></div>
       </div>
     </section>
 
     <section class="band-section" data-seg="night:0.1,end:1" data-animation="fade-up">
-      <blockquote class="beat-quote">
-        <p>“Masrawy Egyptian Kitchen is a modern, comfortable and authentic exploration of the diverse and uniquely Egyptian dishes that characterize our rich history. Nourishing, delicious and soulful, we hope this will be an experience that conjures up memories of Egypt and invites the curiosity of others to experience the hospitality and kindness that has characterized our culture for centuries”</p>
-        <cite>Mohamed Saleh</cite>
-      </blockquote>
+      <div class="beat-copy">
+        <span class="beat-index"><span class="ar" lang="ar">الصالة</span></span>
+        <h2 class="beat-heading">Sixty seats. One room that feels like Cairo.</h2>
+        <p class="beat-body">A semi-private room for thirty, a summer patio, and catering across the GTA since 2014.</p>
+        <div class="hero-ctas"><a class="btn btn-solid" href={url("reserve/")}>Reserve a table</a><a class="btn btn-ghost" href={url("the-room/")}>See the room</a></div>
+      </div>
     </section>
   </ScrollFilm>
 
