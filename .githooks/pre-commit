@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Enabled by tools/setup.sh and tools/new-site.sh: git config core.hooksPath .githooks
+exec "$(git rev-parse --show-toplevel)/tools/check-clean.sh"

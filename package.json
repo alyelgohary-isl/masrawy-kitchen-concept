@@ -3,8 +3,12 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "check": "tools/check-clean.sh",
+    "predev": "tools/check-clean.sh",
     "dev": "astro dev",
+    "prebuild": "tools/check-clean.sh",
     "build": "astro build",
+    "prepreview": "tools/check-clean.sh",
     "preview": "astro preview"
   },
   "dependencies": {
