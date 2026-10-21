@@ -193,6 +193,8 @@ body.nav-open .nav-toggle span::after { top: 0; transform: rotate(-45deg); }
 .scrub-hero .wrap { padding-bottom: 72px; width: 100%; }
 .scrub-hero.square .wrap { align-self: center; padding-bottom: 0; }
 .scrub-hero h1 { font-size: clamp(2.6rem, 5.4vw, 5rem); text-shadow: 0 2px 30px rgba(0, 0, 0, 0.5); max-width: 12em; }
+.scrub-hero.square h1 { max-width: 8.5em; }
+.scrub-hero.square .lede { max-width: 40ch; }
 .scrub-hero .lede { color: var(--ivory-soft); max-width: 48ch; font-size: 1.1rem; margin-top: 16px; }
 .scrub-hero .ar-mark { display: block; font-size: clamp(2.2rem, 4.5vw, 3.6rem); color: var(--brass-2); line-height: 1; margin-bottom: 8px; }
 .scrub-hero .breadcrumbs { color: var(--ivory-soft); }
@@ -201,8 +203,8 @@ body.nav-open .nav-toggle span::after { top: 0; transform: rotate(-45deg); }
   .scrub-runway { height: 260vh; }
   .scrub-hero .wrap, .scrub-hero.square .wrap { align-self: end; padding-bottom: 110px; }
   .scrub-hero.square canvas { inset: auto; left: 50%; top: 36%; width: 100vw; height: 100vw; }
-  .dial { flex-wrap: wrap; gap: 0 18px; }
-  .dial li { font-size: 0.62rem; letter-spacing: 0.08em; flex: 0 0 auto; white-space: nowrap; padding: 8px 0; }
+  .dial { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+  .dial li { font-size: 0.62rem; letter-spacing: 0.08em; white-space: nowrap; padding: 8px 0; }
   .scrub-hero.square::before { background: linear-gradient(180deg, rgba(18, 11, 9, 0.2), rgba(18, 11, 9, 0.2) 45%, rgba(18, 11, 9, 0.92) 65%); }
 }
 
