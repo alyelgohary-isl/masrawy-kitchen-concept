@@ -1,0 +1,104 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { site, phone, phoneHref } from "@/site.config";
+import { url, absolute } from "@/lib/url";
+
+const photos = [
+  { img: "room-main", alt: "The main dining room with string lights, beams and patterned tile", cap: "The main room" },
+  { img: "room-mashrabiya", alt: "Mashrabiya screen, back-lit", cap: "Mashrabiya screens divide the rooms" },
+  { img: "room-private", alt: "The semi-private room: tufted booths under the arabesque wall", cap: "The semi-private room" },
+  { img: "room-booths", alt: "Booths under the arabesque wall", cap: "Booths under the arabesque wall" },
+  { img: "room-counter", alt: "The counter and pass", cap: "The counter" },
+  { img: "room-gallery-wall", alt: "Framed Egyptian prints on a dark wall", cap: "The gallery wall" },
+  { img: "room-screens", alt: "Carved wooden screens along the window wall", cap: "Window wall" },
+  { img: "patio", alt: "The summer patio with red chairs under a tent", cap: "The summer patio" },
+  { img: "food-truck", alt: "The Masrawy food truck at an outdoor event", cap: "The food truck, for outdoor events" },
+];
+const schema = [
+  { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: absolute() },
+    { "@type": "ListItem", position: 2, name: "The Room", item: absolute("the-room/") },
+  ] },
+];
+---
+<Layout
+  title="Private Events in Mississauga | The Room at Masrawy"
+  description="A 60-seat Egyptian dining room with a semi-private space for 30: engagement parties, rehearsal dinners, iftars, team dinners and birthdays at Masrawy, Mississauga."
+  path="the-room/"
+  current="room"
+  schema={schema}
+>
+<main class="page">
+  <section class="page-hero">
+    <div class="wrap">
+      <div>
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>The Room</nav>
+        <span class="ar-mark" lang="ar">الصالة</span>
+        <h1>A room that feels like <em>Cairo</em>, built for a crowd.</h1>
+        <p class="lede">Mohamed designed Masrawy to feel like a bustling market, a nod to Khan El-Khalili: mashrabiya screens, arabesque walls, clay pottery and wood under exposed beams and warm bulbs. Sixty seats in the main room, and a semi-private room for thirty that closes off for your own party.</p>
+        <div class="hero-ctas"><a class="btn btn-solid" href="#book">Book the room</a><a class="btn btn-dark" href={url("catering/")}>Catering off-site</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section no-top">
+    <div class="gallery-grid wrap">
+      {photos.map((p) => <figure class="reveal"><img src={url(`assets/img/${p.img}.webp`)} alt={p.alt} loading="lazy" /><figcaption>{p.cap}</figcaption></figure>)}
+    </div>
+  </section>
+
+  <section class="section dark">
+    <div class="wrap">
+      <div class="statement">
+        <h2 class="reveal">Engagements, iftars, <em>team dinners.</em></h2>
+        <div class="reveal">
+          <p>The semi-private room seats thirty under the arabesque wall, and the full dining room can be booked for larger events. Menus are built from the catering lists and served family style, so the table fills the way a sofra should.</p>
+        </div>
+      </div>
+      <div class="fact-grid reveal">
+        <div class="fact"><span class="n">60</span><span class="l">seats in the main room</span></div>
+        <div class="fact"><span class="n">30</span><span class="l">in the semi-private room</span></div>
+        <div class="fact"><span class="n">48h</span><span class="l">notice for set menus</span></div>
+        <div class="fact"><span class="n">100%</span><span class="l">halal, with vegan and vegetarian menus</span></div>
+      </div>
+      <!-- CONFIRM: minimum spend, deposit, room-hire fee, AV, and whether the full buyout is offered -->
+    </div>
+  </section>
+
+  <section class="section paper" id="book">
+    <div class="wrap form-layout">
+      <div class="sticky reveal">
+        <span class="eyebrow">Private events</span>
+        <h2 style="margin-top:0.8rem">Tell us about the night.</h2>
+        <p class="ink-soft" style="margin-top:1rem;font-size:1.05rem">Date, headcount and the occasion is enough to start. Or call {phone} to talk it through.</p>
+        <dl class="contact-details">
+          <div><dt>Phone</dt><dd><a href={phoneHref}>{phone}</a></dd></div>
+          <div><dt>Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+        </dl>
+      </div>
+      <div>
+        <form class="form reveal" method="post" data-form="private-event" data-form-type="private_event">
+          <div class="row">
+            <div class="field"><label for="first_name">First name*</label><input id="first_name" name="first_name" required /></div>
+            <div class="field"><label for="last_name">Last name*</label><input id="last_name" name="last_name" required /></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="email">Email*</label><input id="email" type="email" name="email" required /></div>
+            <div class="field"><label for="phone">Phone*</label><input id="phone" type="tel" name="phone" required /></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="date">Date</label><input id="date" type="date" name="date" /></div>
+            <div class="field"><label for="guests">Guests</label><input id="guests" type="number" min="8" name="guests" placeholder="e.g. 24" /></div>
+          </div>
+          <div class="field"><label for="occasion">Occasion</label><select id="occasion" name="occasion"><option value="" selected>Select…</option><option>Engagement or wedding</option><option>Birthday</option><option>Iftar or Eid</option><option>Corporate or team dinner</option><option>Baby shower</option><option>Other</option></select></div>
+          <div class="field"><label for="message">Anything else</label><textarea id="message" name="message" placeholder="Dietary needs, set menu, timing…"></textarea></div>
+          <label class="check"><input type="checkbox" name="consent" value="yes" required /> <span>I'm happy for Masrawy to contact me about this enquiry.</span></label>
+          <button class="btn btn-solid btn-lg" type="submit">Send enquiry</button>
+          <p class="micro recaptcha-note">This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.</p>
+        </form>
+        <div class="form-success"><h3>Got it.</h3><p>We'll come back to you with availability and a menu to start from.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+</Layout>

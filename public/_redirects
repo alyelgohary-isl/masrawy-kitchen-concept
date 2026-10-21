@@ -1,0 +1,16 @@
+# Old WordPress URLs -> new pages, as real 301s (Netlify / Cloudflare Pages format).
+# On nginx or Apache, convert each line to a `return 301` / `Redirect 301` rule.
+/blog/                       /our-story/#press  301
+/masrawy/blog/               /our-story/#press  301
+/reviews/                    /our-story/#press  301
+/reservation/                /reserve/          301
+/category/*                  /our-story/#press  301
+/healthy-food/quote-2/       /our-story/        301
+/mai-mama-wafaa-event/       /the-room/         301
+/media-coverage/*            /our-story/#press  301
+/news/*                      /our-story/#press  301
+/review/*                    /our-story/#press  301
+/MEK-Menu-v4F.pdf            /menu/             301
+/MEK-Menu-Breakfast.pdf      /brunch/           301
+/MEK-Catering-Corporate.pdf  /catering/#corporate 301
+/order                       https://www.clover.com/online-ordering/masrawy-egyptian-kitchen-mississauga 302

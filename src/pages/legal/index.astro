@@ -1,0 +1,36 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { site } from "@/site.config";
+import { url } from "@/lib/url";
+---
+<Layout
+  title={`Legal | ${site.name}`}
+  description={`Legal notices, privacy and allergen information for the ${site.name} website.`}
+  path="legal/"
+>
+<main class="page">
+  <section class="page-hero">
+    <div class="wrap">
+      <div>
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>Legal</nav>
+        <h1>Legal</h1>
+      </div>
+    </div>
+  </section>
+  <section class="section no-top">
+    <div class="wrap-narrow prose">
+      <!-- CONFIRM: legal copy from the client -->
+      <h2>Menus and prices</h2>
+      <p>Menu items and prices are shown as published on our printed menus and are subject to applicable taxes. They may change without notice, and availability varies by day.</p>
+      <h2>Allergens and dietary needs</h2>
+      <p>Our kitchen handles wheat, dairy, eggs, sesame, tree nuts, shellfish and fish. Dishes marked vegan contain no animal products as prepared, but are cooked in a shared kitchen. Please tell your server or note any allergy on your order; we will do our best to accommodate it.</p>
+      <h2>Halal</h2>
+      <p>All food prepared by {site.name} is 100% halal.<!-- CONFIRM: certification body, if the client wants it named --></p>
+      <h2>Privacy and communications</h2>
+      <p>Forms on this website send your message by email to {site.name}. We use the details you give us only to answer you, and we don't sell or share them. If you tick the newsletter box you agree to receive occasional updates by email and can unsubscribe at any time by writing to <a href={`mailto:${site.email}`}>{site.email}</a>. This site is protected by reCAPTCHA; the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.</p>
+      <h2>Photography</h2>
+      <p>Photographs on this site are by DK Photography and are the property of {site.name}.</p>
+    </div>
+  </section>
+</main>
+</Layout>

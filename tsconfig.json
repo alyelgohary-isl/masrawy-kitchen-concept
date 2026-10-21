@@ -1,0 +1,8 @@
+{
+  "extends": "astro/tsconfigs/base",
+  "compilerOptions": {
+    "paths": { "@/*": ["./src/*"] }
+  },
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist", "work", "videos", "key_frames"]
+}

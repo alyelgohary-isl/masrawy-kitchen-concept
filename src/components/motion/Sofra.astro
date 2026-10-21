@@ -1,0 +1,73 @@
+---
+/* Sofra: the home "film" without frames. A locked overhead table; each signature dish is
+   its own layer that lands as the visitor scrolls, with its caption driven by the same
+   scroll progress so text and image can never drift. The ending dips through the dark
+   ground into the client's real overhead photo, then the real room, then releases the page.
+
+   Layers today are placeholders cut from the client's photos. The intended final asset is one
+   generated 4K master still of the fully laid table, sliced per dish with its real shadows
+   (work/beats.md); the component does not change when those land, only the image files. */
+import { url } from "../../lib/url";
+import { site } from "../../site.config";
+import { signature } from "../../data/menu";
+
+interface Props {
+  eyebrow: string;
+  heading: string;        // HTML allowed: <em> for the accent
+  tagline: string;
+  hands: { img: string; alt: string; heading: string; body: string };
+  room: { img: string; alt: string; heading: string; body: string };
+}
+const { eyebrow, heading, tagline, hands, room } = Astro.props;
+---
+<section class="sofra" id="sofra" aria-label="Signature dishes" data-sofra>
+  <div class="stage">
+    <div class="ground"></div>
+
+    <div class="table" aria-hidden="true">
+      <img class="dish base" style="--x:24%;--y:26%;--w:17%" src={url("assets/img/layer-bread.webp")} alt="" width="900" height="900" loading="eager" />
+      {signature.map((d, i) => (
+        <img class="dish" data-beat={i + 1} style={`--x:${d.x};--y:${d.y};--w:${d.w}`} src={url(`assets/img/${d.layer}.webp`)} alt="" width="900" height="900" loading="eager" />
+      ))}
+    </div>
+
+    <div class="cap-col">
+      <div class="cap intro" data-beat="0">
+        <span class="eyebrow">{eyebrow}</span>
+        <h1 set:html={heading} />
+        <p>{tagline}</p>
+        <div class="hero-ctas">
+          <a class="btn btn-solid" href={site.cta.href} target="_blank" rel="noopener">{site.cta.label}</a>
+          <a class="btn btn-ghost" href={url("reserve/")}>Reserve a table</a>
+        </div>
+      </div>
+      {signature.map((d, i) => (
+        <div class="cap" data-beat={i + 1}>
+          <span class="index">{["One", "Two", "Three", "Four", "Five", "Six", "Seven"][i]}</span>
+          <span class="ar" lang="ar">{d.ar}</span>
+          <h2>{d.name}</h2>
+          <p>{d.desc}</p>
+          <span class="price">{d.price}</span>
+        </div>
+      ))}
+    </div>
+
+    <div class="over hands" data-over="1">
+      <img src={url(`assets/img/${hands.img}.webp`)} alt={hands.alt} loading="eager" />
+      <div class="scrim"></div>
+      <div class="line"><h2>{hands.heading}</h2><p>{hands.body}</p></div>
+    </div>
+    <div class="over room" data-over="2">
+      <img src={url(`assets/img/${room.img}.webp`)} alt={room.alt} loading="eager" />
+      <div class="scrim"></div>
+      <div class="line"><h2>{room.heading}</h2><p>{room.body}</p><a class="btn btn-ghost" href={url("the-room/")}>See the room</a></div>
+    </div>
+
+    <div class="hint"><i></i>Scroll</div>
+    <div class="progress"><b></b></div>
+  </div>
+</section>
+
+<script>
+  import "./sofra.js";
+</script>

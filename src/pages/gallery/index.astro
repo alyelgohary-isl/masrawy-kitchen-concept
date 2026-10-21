@@ -1,0 +1,69 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { url, absolute } from "@/lib/url";
+
+const photos: [string, string][] = [
+  ["hands-spread", "Hands reaching into a shared platter of tamaaya, fries and salad"],
+  ["room-main", "The main dining room with string lights and patterned tile"],
+  ["koshary", "Koshary with fried onions, dakka and hot sauce"],
+  ["room-mashrabiya", "A carved mashrabiya screen, back-lit"],
+  ["hawawshi", "Hawawshi cut and stacked, crisp balady bread around spiced beef"],
+  ["spread-grill", "A mixed grill spread with rice, dips and bread"],
+  ["macarona-bechamel", "Macarona bechamel in a clay pot with a golden top"],
+  ["room-private", "The semi-private room under the arabesque wall"],
+  ["feteer-honey", "Feteer served with honey and molasses"],
+  ["kebda", "Kebda Eskandarani with peppers"],
+  ["tea-pour", "Egyptian tea poured into glasses"],
+  ["lamb-shank", "Lamb shank fatta"],
+  ["brunch-eggs", "Egyptian breakfast: eggs, ful, home fries and balady bread"],
+  ["kunafa-syrup", "Syrup poured over kunafa"],
+  ["room-booths", "Booths against the arabesque wall"],
+  ["grill-platter", "A grill platter with kofta, chicken and rice"],
+  ["coffee-pour", "Egyptian coffee poured from a kanaka"],
+  ["mahshi", "Stuffed grape leaves with lemon"],
+  ["kofta-tahina", "Tahina poured over kofta"],
+  ["room-counter", "The counter and pass"],
+  ["fish-platter", "Grilled fish on a platter"],
+  ["basbusa", "Basbusa with pistachios"],
+  ["mint-lemonade", "Mint lemonade on the table"],
+  ["patio", "The summer patio"],
+  ["hamam", "Hamam mahshi, stuffed pigeon"],
+  ["tamaaya", "Tamaaya with tahina"],
+  ["drinks", "Fresh juices and cold drinks"],
+  ["food-truck", "The Masrawy food truck"],
+  ["chicken-tikka", "Chicken tikka with rice"],
+  ["room-gallery-wall", "The gallery wall of Egyptian prints"],
+  ["calamari", "Fried calamari in a cone"],
+  ["spread-mixed", "A table full of shared plates"],
+];
+const schema = [
+  { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: absolute() },
+    { "@type": "ListItem", position: 2, name: "Gallery", item: absolute("gallery/") },
+  ] },
+];
+---
+<Layout
+  title="Gallery | Masrawy Egyptian Kitchen"
+  description="Photos of the food and the room at Masrawy Egyptian Kitchen in Mississauga: koshary, hawawshi, feteer, the mashrabiya screens and the semi-private room."
+  path="gallery/"
+  schema={schema}
+>
+<main class="page">
+  <section class="page-hero">
+    <div class="wrap">
+      <div>
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>Gallery</nav>
+        <span class="ar-mark" lang="ar">صور</span>
+        <h1>What we make, <em>where we make it.</em></h1>
+        <p class="lede">Photography by DK Photography.</p>
+      </div>
+    </div>
+  </section>
+  <section class="section no-top">
+    <div class="gallery-grid wrap">
+      {photos.map(([img, alt]) => <figure class="reveal"><img src={url(`assets/img/${img}.webp`)} alt={alt} loading="lazy" /></figure>)}
+    </div>
+  </section>
+</main>
+</Layout>

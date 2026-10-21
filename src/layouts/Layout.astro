@@ -1,0 +1,97 @@
+---
+/* Shared page shell: head tags, header, footer, mobile action bar and site-wide scripts.
+   Page content goes in the default slot; anything extra for <head> goes in slot="head". */
+import "../styles/style.css";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import ActionBar from "../components/ActionBar.astro";
+import { site, type NavKey } from "../site.config";
+import { url, absolute, SITE_URL } from "../lib/url";
+
+interface Props {
+  /** SEO title, ≤ 60 characters */
+  title: string;
+  /** Meta description, ≤ 155 characters */
+  description: string;
+  /** Path on the production domain, e.g. "menu/" ("" for home) */
+  path: string;
+  /** Nav item to mark as the current page */
+  current?: NavKey;
+  ogImage?: string;
+  /** Extra JSON-LD objects (breadcrumbs, FAQ, menu…); the Restaurant block is always included */
+  schema?: object[];
+  /** "inner" for regular pages; "film" for the home page led by the sofra */
+  variant?: "inner" | "film";
+}
+
+const { title, description, path, current, ogImage = site.ogImage, schema = [], variant = "inner" } = Astro.props;
+const canonical = absolute(path);
+
+const RESTAURANT = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": `${SITE_URL}/#restaurant`,
+  name: site.name,
+  url: SITE_URL,
+  email: site.email,
+  description: site.description,
+  slogan: site.tagline,
+  image: absolute(site.ogImage),
+  ...site.schema,
+};
+const { gtm, ga4, gscVerification } = site.tracking;
+const { letter, background, color } = site.favicon;
+const FAVICON = "data:image/svg+xml," + encodeURIComponent(
+  `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='${background}'/><text x='16' y='23' text-anchor='middle' font-family='Amiri,Georgia,serif' font-size='20' fill='${color}'>${letter}</text></svg>`
+);
+---
+<!DOCTYPE html>
+<html lang="en" class={variant === "inner" ? "inner" : undefined}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  {site.noindex && <meta name="robots" content="noindex, nofollow" />}
+  {gtm && <script define:vars={{ gtm }}>
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+    var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+    j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer',gtm);
+  </script>}
+  {!gtm && ga4 && <script async src={`https://www.googletagmanager.com/gtag/js?id=${ga4}`}></script>}
+  {!gtm && ga4 && <script define:vars={{ ga4 }}>
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { dataLayer.push(arguments); };
+    gtag('js', new Date());
+    gtag('config', ga4);
+    window.trackLead = function (params) { gtag('event', 'generate_lead', params); };
+  </script>}
+  {gscVerification && <meta name="google-site-verification" content={gscVerification} />}
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonical} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={absolute(ogImage)} />
+  <meta property="og:site_name" content={site.name} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#1b1310" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href={site.fonts} rel="stylesheet" />
+  <link rel="icon" href={FAVICON} />
+  {[RESTAURANT, ...schema].map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
+  <slot name="head" />
+</head>
+<body class={variant}>
+  {gtm && <noscript><iframe src={`https://www.googletagmanager.com/ns.html?id=${gtm}`} height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>}
+  <Header current={current} />
+  <slot />
+  <Footer />
+  <ActionBar />
+  <!-- public/js/config.js holds the form endpoint and reCAPTCHA key; it stays a plain, unbundled file so it is easy to find and edit -->
+  <script is:inline src={url("js/config.js")}></script>
+  <script>import "../scripts/site.js";</script>
+</body>
+</html>

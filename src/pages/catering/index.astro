@@ -1,0 +1,153 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { site, phone, phoneHref } from "@/site.config";
+import { url, absolute } from "@/lib/url";
+import { corporate, privateCatering, cateringTerms } from "@/data/menu";
+
+const tagClass = (t: string) => t.toLowerCase().includes("vegan") ? "tag vegan" : "tag";
+const faq = [
+  { q: "How much notice does Masrawy catering need?", a: "48 hours for most orders; longer for weddings and large events. Changes and cancellations need 24 hours." },
+  { q: "Is there a minimum order?", a: "On the corporate menu, 10 of each item. Delivery needs a $300 minimum; pick-up from the restaurant is free with no minimum." },
+  { q: "Do you deliver across the GTA?", a: "Yes. Delivery fees start at $10 and depend on location; allow a 15-minute window either side of the requested time." },
+  { q: "Can you handle vegan, vegetarian or gluten-free guests?", a: "Yes. Ask for a custom menu; koshary, tamaaya, ful, mahshi and most dips are vegan." },
+  { q: "Is the food halal?", a: "Everything Masrawy cooks is 100% halal." },
+];
+const schema = [
+  { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: absolute() },
+    { "@type": "ListItem", position: 2, name: "Catering", item: absolute("catering/") },
+  ] },
+  { "@context": "https://schema.org", "@type": "FoodService", name: "Masrawy Egyptian Catering", provider: { "@id": absolute("#restaurant") }, areaServed: "Greater Toronto Area", description: "Egyptian catering for weddings, corporate events, iftars and private parties across the GTA, since 2014." },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
+];
+---
+<Layout
+  title="Egyptian Catering Toronto & GTA | Masrawy Catering"
+  description="Toronto's first professional Egyptian caterer, since 2014. Corporate lunches from $16 per person, wedding and iftar trays, and a food truck. 48 hours' notice, delivery across the GTA."
+  path="catering/"
+  current="catering"
+  schema={schema}
+>
+<main class="page">
+  <section class="page-hero has-photo">
+    <div class="wrap">
+      <div>
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>Catering</nav>
+        <span class="ar-mark" lang="ar">كاترينج</span>
+        <h1>Catering is where <em>Masrawy started.</em></h1>
+        <p class="lede">Before the restaurant there were four years of weddings, engagements and office lunches: Toronto's first professional Egyptian caterer, since 2014. Trays for family tables, per-person menus for the office, and a food truck for the company barbecue.</p>
+        <div class="hero-ctas"><a class="btn btn-solid" href="#quote">Get a quote</a><a class="btn btn-dark" href="#corporate">Corporate menu</a><a class="btn btn-dark" href="#private">Family and wedding trays</a></div>
+      </div>
+      <div class="hero-photo"><img src={url("assets/img/platter-hands.webp")} alt="Hands serving from a large catering platter" loading="eager" /></div>
+    </div>
+  </section>
+
+  <section class="section no-top">
+    <div class="wrap">
+      <ol class="steps">
+        <li><h3>Tell us the date and headcount</h3><p>Form below or a phone call. 48 hours is the minimum; larger events need more.</p></li>
+        <li><h3>Pick a menu or let us build one</h3><p>Per-person corporate menus, family-style trays from the classics list, or a custom menu around dietary needs.</p></li>
+        <li><h3>Pick-up or delivery</h3><p>Free pick-up from Britannia Road. Delivery across the GTA from $10, with plates, cutlery and serving utensils included on corporate orders.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section dark" id="corporate">
+    <div class="wrap">
+      <span class="eyebrow reveal">Corporate menu · per person</span>
+      <h2 class="reveal" style="font-size:clamp(2rem,3.6vw,3.2rem);margin-top:10px">Office lunches that get talked about.</h2>
+      <p class="ink-soft reveal" style="max-width:60ch;margin-top:12px">Minimum 10 of each item. Set-up available. All orders include disposable plates, cutlery, napkins and serving utensils.</p>
+      {corporate.map((s) => (
+        <section class="menu-section" id={`corp-${s.id}`}>
+          <div class="menu-head" style="border-bottom-color:var(--hair-light)"><h2 style="color:var(--cream)">{s.title}</h2>{s.price && <span class="pricing" style="color:var(--cream-soft)">{s.price}</span>}</div>
+          {s.note && <p class="menu-note" style="color:var(--cream-soft)">{s.note}</p>}
+          <div class="menu-items">
+            {s.items.map((i) => (
+              <div class="menu-item" style="border-bottom-color:var(--hair-light)">
+                <div class="names"><h3 style="color:var(--cream)">{i.name}</h3>{i.ar && <span class="ar" lang="ar" style="color:var(--brass-2)">{i.ar}</span>}{i.tags?.map((t) => <span class={tagClass(t)} style="border-color:var(--hair-light);color:var(--cream-soft)">{t}</span>)}</div>
+                <span class="price" style="color:var(--brass-2)">{i.price ?? ""}</span>
+                {i.desc && <p style="color:var(--cream-soft)">{i.desc}</p>}
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  </section>
+
+  <section class="section" id="private">
+    <div class="wrap">
+      <div class="split-head">
+        <div class="section-head reveal">
+          <span class="eyebrow">Private and family catering · by the tray</span>
+          <h2>Weddings, engagements, iftars, baby showers.</h2>
+          <p>Family-style trays of the dishes an Egyptian table expects. Portion sizes and tray prices on request; most families order from the classics and stuffed lists and add a roast.</p>
+        </div>
+        <a class="btn btn-dark reveal" href="#quote">Ask for tray prices</a>
+      </div>
+      <div class="lists">
+        {privateCatering.map((g) => <div class="reveal"><h3>{g.title}{g.ar && <span class="ar" lang="ar">{g.ar}</span>}</h3><ul>{g.items.map((i) => <li>{i}</li>)}</ul></div>)}
+      </div>
+      <!-- CONFIRM: tray sizes and prices (the current site shows a portion-size image with no text) -->
+    </div>
+  </section>
+
+  <section class="band">
+    <img src={url("assets/img/food-truck-crowd.webp")} alt="A crowd at the Masrawy food truck at an outdoor event" loading="lazy" />
+    <div class="wrap"><h2><span class="ar" lang="ar">عربية أكل</span>The food truck.</h2><p>An Egyptian street-food experience for company barbecues and outdoor events, for any number of guests. Your menu or chef's choice.</p><a class="btn btn-ghost" href="#quote">Ask about the truck</a></div>
+  </section>
+
+  <section class="section">
+    <div class="wrap visit">
+      <div class="reveal">
+        <span class="eyebrow">The small print</span>
+        <ul class="terms" style="margin-top:16px">{cateringTerms.map((t) => <li>{t}</li>)}</ul>
+      </div>
+      <div class="reveal">
+        <span class="eyebrow">Questions</span>
+        <div class="faq" style="margin-top:16px">{faq.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section paper" id="quote">
+    <div class="wrap form-layout">
+      <div class="sticky reveal">
+        <span class="eyebrow">Catering quote</span>
+        <h2 style="margin-top:0.8rem">Feed the room.</h2>
+        <p class="ink-soft" style="margin-top:1rem;font-size:1.05rem">Date, headcount, where and roughly what, and we'll send a menu and a price. Or call {phone}.</p>
+        <dl class="contact-details">
+          <div><dt>Phone</dt><dd><a href={phoneHref}>{phone}</a></dd></div>
+          <div><dt>Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+        </dl>
+      </div>
+      <div>
+        <form class="form reveal" method="post" data-form="catering" data-form-type="catering_quote">
+          <div class="row">
+            <div class="field"><label for="first_name">First name*</label><input id="first_name" name="first_name" required /></div>
+            <div class="field"><label for="last_name">Last name*</label><input id="last_name" name="last_name" required /></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="email">Email*</label><input id="email" type="email" name="email" required /></div>
+            <div class="field"><label for="phone">Phone*</label><input id="phone" type="tel" name="phone" required /></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="company">Company (if corporate)</label><input id="company" name="company" /></div>
+            <div class="field"><label for="type">Type of event*</label><select id="type" name="event_type" required><option value="" disabled selected>Select…</option><option>Corporate lunch or meeting</option><option>Wedding or engagement</option><option>Iftar or Eid</option><option>Birthday or family gathering</option><option>Food truck</option><option>Other</option></select></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="date">Date*</label><input id="date" type="date" name="date" required /></div>
+            <div class="field"><label for="guests">Guests*</label><input id="guests" type="number" min="10" name="guests" required placeholder="e.g. 40" /></div>
+          </div>
+          <div class="field"><label for="location">Delivery address or pick-up</label><input id="location" name="location" placeholder="Pick-up, or the delivery address" /></div>
+          <div class="field"><label for="message">Menu ideas, dietary needs, budget</label><textarea id="message" name="message"></textarea></div>
+          <label class="check"><input type="checkbox" name="consent" value="yes" required /> <span>I'm happy for Masrawy to contact me about this quote.</span></label>
+          <button class="btn btn-solid btn-lg" type="submit">Request a quote</button>
+          <p class="micro recaptcha-note">This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.</p>
+        </form>
+        <div class="form-success"><h3>Thanks, we're on it.</h3><p>Expect a menu and a price shortly.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+</Layout>

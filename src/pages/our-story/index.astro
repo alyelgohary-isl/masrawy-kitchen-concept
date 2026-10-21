@@ -1,0 +1,81 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { url, absolute } from "@/lib/url";
+
+const press = [
+  { src: "CBC News", title: "How to get traditional Egyptian cuisine without leaving your office", year: "2018", href: "https://www.cbc.ca/news/canada/toronto/suresh-doss-ep-49-1.4830694" },
+  { src: "Insauga", title: "Masrawy brings true Egyptian cuisine, hospitality to Mississauga", year: "2018" },
+  { src: "Insauga", title: "Highly anticipated Egyptian restaurant officially open in Mississauga", year: "2019" },
+  { src: "Insauga", title: "Five reasons you need to try this amazing Egyptian restaurant", year: "2020" },
+  { src: "Shifting", title: "Restaurant spotlight: Masrawy Egyptian Kitchen", year: "2020" },
+  { src: "Dobbernation Loves", title: "Masrawy Kitchen: best Egyptian restaurant in Mississauga", year: "2022", href: "https://dobbernationloves.com/food-drink/masrawy-kitchen-mississauga/" },
+  { src: "Taste Toronto", title: "Masrawy Egyptian Kitchen", year: "2023", href: "https://www.tastetoronto.com/spots/masrawy-egyptian-kitchen" },
+  { src: "Jamal Adventures", title: "Masrawy Kitchen: our Egyptian experience", year: "2019" },
+  { src: "Oxygen Talk Show", title: "Masrawy Kitchen preview", year: "2019" },
+];
+// CONFIRM: links and years for the Insauga, Shifting and video pieces (the old blog posts carry the text but not the source URLs)
+const schema = [
+  { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: absolute() },
+    { "@type": "ListItem", position: 2, name: "Our Story", item: absolute("our-story/") },
+  ] },
+];
+---
+<Layout
+  title="Our Story | Masrawy Egyptian Kitchen, Mississauga"
+  description="From Toronto's first professional Egyptian caterer in 2014 to Mississauga's first dine-in Egyptian soul food restaurant in 2018. Mohamed Salah Saleh's Masrawy, and what people have written about it."
+  path="our-story/"
+  current="story"
+  schema={schema}
+>
+<main class="page">
+  <section class="page-hero has-photo">
+    <div class="wrap">
+      <div>
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>Our Story</nav>
+        <span class="ar-mark" lang="ar">حكايتنا</span>
+        <h1>Masrawy means <em>"Egyptian".</em> Just that.</h1>
+        <p class="lede">Mohamed Salah Saleh was born in Saudi Arabia to Egyptian parents and grew up in Mississauga, where the food that mattered was his mother's. He worked in PR and marketing, then decided the community needed a place of its own.</p>
+      </div>
+      <div class="hero-photo round"><img src={url("assets/img/coffee-pour.webp")} alt="Egyptian coffee poured from a kanaka into a cup" loading="eager" /></div>
+    </div>
+  </section>
+
+  <section class="section no-top">
+    <div class="wrap-narrow">
+      <ol class="timeline">
+        <li class="reveal"><span class="year">2014</span><div><h3>The first professional Egyptian caterer in Toronto</h3><p>Masrawy started by renting kitchen space and catering Egyptian food for weddings, engagements and offices. Within a few years the client list included Amazon, Procter &amp; Gamble, Microsoft and KPMG, and the set of Suits.</p></div></li>
+        <li class="reveal"><span class="year">2016</span><div><h3>Expansion</h3><p>Demand for catering outgrew the rented kitchen. The team expanded, and the idea of a room where people could sit down to the same food took hold.</p></div></li>
+        <li class="reveal"><span class="year">2018</span><div><h3>The restaurant opens on Britannia Road</h3><p>Mississauga's first dine-in Egyptian soul food restaurant: "an authentic, contemporary take on Egyptian cuisine", in a room designed to feel like a Cairo market. Word of mouth did the rest.</p></div></li>
+        <li class="reveal"><span class="year">Today</span><div><h3>Still a labour of love</h3><p>Original recipes, fresh 100% halal ingredients, a brunch menu that has become its own reason to visit, and a dining room that regulars treat as their own.</p><!-- CONFIRM: a sister Masrawy Cafe was reported opening in Mississauga in 2025; add it here if the client wants it featured --></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section dark">
+    <div class="wrap">
+      <blockquote class="quote reveal">"Nourishing, delicious and soulful. We hope this will be an experience that conjures up memories of Egypt."<cite>Mohamed Salah Saleh, founder</cite></blockquote>
+    </div>
+  </section>
+
+  <section class="section" id="press">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Press and reviews</span>
+        <h2>What people have written.</h2>
+      </div>
+      <ul class="press" style="margin-top:28px">
+        {press.map((p) => <li class="reveal"><span class="src">{p.src}</span>{p.href ? <a href={p.href} target="_blank" rel="noopener">{p.title}</a> : <span>{p.title}</span>}<span class="yr">{p.year}</span></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="band-cta">
+    <div class="wrap">
+      <h2>Come and eat.</h2>
+      <p>Open every day from ten. Brunch until two, dinner until ten or eleven.</p>
+      <div class="hero-ctas"><a class="btn btn-solid btn-lg" href={url("menu/")}>See the menu</a><a class="btn btn-ghost btn-lg" href={url("contact/")}>Find us</a></div>
+    </div>
+  </section>
+</main>
+</Layout>

@@ -1,0 +1,18 @@
+---
+/* /order/ hands off to the ordering platform. A real page rather than a bare redirect so the
+   link works from print, ads and the action bar, and so the hop can be tracked. */
+import Layout from "@/layouts/Layout.astro";
+import { orderUrl, phone, phoneHref } from "@/site.config";
+import { url } from "@/lib/url";
+---
+<Layout title="Order Online | Masrawy Egyptian Kitchen" description="Order Masrawy for pick-up from Britannia Road, Mississauga." path="order/">
+  <Fragment slot="head"><meta http-equiv="refresh" content={`2; url=${orderUrl}`} /></Fragment>
+  <main class="page">
+    <section class="page-hero"><div class="wrap"><div>
+      <span class="ar-mark" lang="ar">اطلب</span>
+      <h1>Taking you to <em>online ordering.</em></h1>
+      <p class="lede">Pick-up from 2275 Britannia Rd W. If nothing happens in a moment, use the button.</p>
+      <div class="hero-ctas"><a class="btn btn-solid btn-lg" href={orderUrl} rel="noopener">Continue to order</a><a class="btn btn-dark btn-lg" href={phoneHref}>Or call {phone}</a><a class="btn btn-dark btn-lg" href={url("menu/")}>See the menu first</a></div>
+    </div></div></section>
+  </main>
+</Layout>

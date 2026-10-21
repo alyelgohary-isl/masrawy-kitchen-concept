@@ -1,0 +1,14 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { url } from "@/lib/url";
+---
+<Layout title="Page not found | Masrawy" description="That page isn't on the menu." path="404/">
+  <main class="page">
+    <section class="page-hero"><div class="wrap"><div>
+      <span class="ar-mark" lang="ar">مفيش</span>
+      <h1>That page isn't <em>on the menu.</em></h1>
+      <p class="lede">The link may be old. Everything is still here, just moved.</p>
+      <div class="hero-ctas"><a class="btn btn-solid" href={url("menu/")}>The menu</a><a class="btn btn-dark" href={url("")}>Home</a><a class="btn btn-dark" href={url("contact/")}>Contact</a></div>
+    </div></div></section>
+  </main>
+</Layout>

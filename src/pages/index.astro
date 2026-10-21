@@ -1,0 +1,112 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Sofra from "@/components/motion/Sofra.astro";
+import { site, hours, brunchHours, phone, phoneHref, address, mapsUrl, mapsEmbed, orderUrl } from "@/site.config";
+import { url } from "@/lib/url";
+import { signature } from "@/data/menu";
+
+const room = [
+  { img: "room-main", alt: "The main dining room at Masrawy: exposed beams, string lights and patterned tile", cap: "The main room", ar: "الصالة" },
+  { img: "room-mashrabiya", alt: "A carved mashrabiya screen lit from behind", cap: "Mashrabiya screen", ar: "مشربية", tall: true },
+  { img: "room-private", alt: "The semi-private room with tufted booths under a patterned Egyptian wall", cap: "The semi-private room, seats 30", ar: "القاعة الخاصة" },
+  { img: "room-booths", alt: "Booth seating against the arabesque wall", ar: "أرابيسك", cap: "Booths under the arabesque wall", tall: true },
+  { img: "room-counter", alt: "The counter and open kitchen pass", cap: "The counter", ar: "الكاونتر" },
+  { img: "room-gallery-wall", alt: "The gallery wall of framed Egyptian prints", cap: "The gallery wall", ar: "الحائط" },
+];
+---
+<Layout
+  title="Masrawy Egyptian Kitchen | Egyptian Restaurant in Mississauga"
+  description="Egyptian soul food in Mississauga: koshary, hawawshi, molokhia and feteer, brunch every day, a 60-seat room that feels like Cairo, and catering across the GTA. 100% halal."
+  path=""
+  variant="film"
+>
+  <Sofra
+    eyebrow="A Taste of Egypt · Mississauga"
+    heading="Egypt's table,<br>laid on <em>Britannia Road.</em>"
+    tagline="Egyptian soul food, cooked the way it is at home and served in a room that feels like Cairo. Dine in, take out, or let us cater."
+    hands={{ img: "hands-spread", alt: "Hands reaching across a shared Egyptian spread at Masrawy", heading: "Everything is for the middle of the table.", body: "Egyptian food is shared. Plates land, hands reach, and nobody orders just for themselves." }}
+    room={{ img: "room-main", alt: "The dining room at Masrawy Egyptian Kitchen", heading: "Sixty seats. One room that feels like Cairo.", body: "Exposed beams, hand-woven tapestries, a mashrabiya screen and a semi-private room for thirty." }}
+  />
+
+  <main class="page-flow">
+    <section class="section" id="doors">
+      <div class="wrap">
+        <div class="doors">
+          <a class="door reveal" href={orderUrl} target="_blank" rel="noopener"><h3>Order online<span class="ar" lang="ar">اطلب</span></h3><p>Pick-up from Britannia Road, ready when you are. Open until 10 Sunday to Thursday, until 11 Friday and Saturday.</p><span class="arrow">→</span></a>
+          <a class="door reveal" href={url("reserve/")}><h3>Reserve a table<span class="ar" lang="ar">احجز</span></h3><p>Reservations for parties of eight or more; smaller tables are first come. Weekends fill up, so call ahead for brunch with the whole family.</p><span class="arrow">→</span></a>
+          <a class="door reveal" href={url("catering/")}><h3>Cater an event<span class="ar" lang="ar">كاترينج</span></h3><p>Weddings, engagements, iftars and corporate lunches, from ten people to a few hundred. Toronto's first professional Egyptian caterer, since 2014.</p><span class="arrow">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section no-top" id="room">
+      <div class="wrap statement">
+        <h2 class="reveal">Built to feel like <em>Khan El-Khalili</em>, two minutes off the 401.</h2>
+        <div class="reveal">
+          <p>The room is the part of Masrawy you can't take home. Mashrabiya screens, arabesque walls, clay pottery and wood under exposed beams and warm bulbs. Sixty seats, plus a semi-private space for thirty that books out for engagement parties and team dinners.</p>
+          <p><a class="btn btn-dark" style="margin-top:18px" href={url("the-room/")}>The room and private events</a></p>
+        </div>
+      </div>
+      <div class="strip">
+        {room.map((r) => (
+          <figure class={r.tall ? "tall" : undefined}><img src={url(`assets/img/${r.img}.webp`)} alt={r.alt} loading="lazy" /><figcaption><span>{r.cap}</span><span class="ar" lang="ar">{r.ar}</span></figcaption></figure>
+        ))}
+      </div>
+    </section>
+
+    <section class="section" id="signature">
+      <div class="wrap">
+        <div class="split-head">
+          <div class="section-head reveal">
+            <span class="eyebrow">Signature dishes</span>
+            <h2>The ones people drive in for.</h2>
+          </div>
+          <a class="btn btn-dark reveal" href={url("menu/")}>Full menu</a>
+        </div>
+        <div class="sig-list">
+          {signature.map((d) => (
+            <a class="sig-row reveal" href={url(d.slug === "lentil" || d.slug === "brunch" ? (d.slug === "brunch" ? "brunch/" : "menu/#soups") : `dishes/${d.slug}/`)}>
+              <img src={url(`assets/img/${d.img}.webp`)} alt="" loading="lazy" width="96" height="96" />
+              <div><div class="names"><h3>{d.name}</h3><span class="ar" lang="ar">{d.ar}</span></div><p>{d.desc}</p></div>
+              <span class="price">{d.price}</span>
+            </a>
+          ))}
+        </div>
+        <p class="micro" style="margin-top:14px">All prices from the current dine-in and brunch menus. 100% halal. Prices subject to change.</p>
+      </div>
+    </section>
+
+    <section class="band" id="brunch">
+      <img src={url("assets/img/spread-brunch.webp")} alt="A Masrawy brunch spread: eggs, ful, tamaaya, bread and salads" loading="lazy" />
+      <div class="wrap">
+        <h2><span class="ar" lang="ar">فطار</span>Brunch, every day, ten to two.</h2>
+        <p>Basterma and eggs, ful in a tajin, tamaaya baked around boiled eggs, and Sweet Cleopatra feteer with molasses and honey. Egyptian breakfast with a few Canadian habits.</p>
+        <a class="btn btn-ghost" href={url("brunch/")}>See the brunch menu</a>
+      </div>
+    </section>
+
+    <section class="section clients" id="catering">
+      <div class="wrap">
+        <span class="eyebrow reveal">Catering since 2014</span>
+        <p class="reveal">Toronto's first professional Egyptian caterer. We've fed weddings and iftars, <em>Amazon, Microsoft, KPMG and P&amp;G</em>, and the cast of Suits.</p>
+        <!-- CONFIRM: client list as the client is happy to state it publicly (source: dobbernationloves.com and tastetoronto.com profiles) -->
+        <div class="hero-ctas reveal" style="justify-content:center"><a class="btn btn-dark" href={url("catering/")}>Catering menus</a><a class="btn btn-dark" href={url("catering/#quote")}>Get a quote</a></div>
+      </div>
+    </section>
+
+    <section class="section paper" id="visit">
+      <div class="wrap visit">
+        <div class="reveal">
+          <h2>Find us.</h2>
+          <table class="hours">
+            {hours.map((h) => <tr><td>{h.days}</td><td>{h.open} – {h.close}</td></tr>)}
+            <tr><td>Brunch</td><td>{brunchHours}</td></tr>
+          </table>
+          <p class="ink-soft" style="margin-top:18px">{address.street}, {address.city}, {address.region} {address.postal}. 100% halal. Vegetarian and vegan options across the menu. Summer patio.</p><!-- CONFIRM: parking details, if the client wants them stated -->
+          <div class="hero-ctas"><a class="btn btn-dark" href={phoneHref}>Call {phone}</a><a class="btn btn-dark" href={mapsUrl} target="_blank" rel="noopener">Get directions</a></div>
+        </div>
+        <iframe class="map reveal" src={mapsEmbed} title={`Map to ${site.name}`} loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      </div>
+    </section>
+  </main>
+</Layout>

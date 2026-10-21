@@ -1,0 +1,105 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { site, orderUrl, phone, phoneHref } from "@/site.config";
+import { url, absolute, SITE_URL } from "@/lib/url";
+import { dineIn, type Item } from "@/data/menu";
+
+const tagClass = (t: string) => t.toLowerCase().includes("vegan") ? "tag vegan" : t.toLowerCase().includes("spicy") ? "tag spicy" : "tag";
+const offers = (i: Item) => {
+  const m = i.price?.match(/\$(\d+(?:\.\d+)?)/);
+  return m ? { "@type": "Offer", price: m[1], priceCurrency: "CAD" } : undefined;
+};
+const schema = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: absolute() },
+      { "@type": "ListItem", position: 2, name: "Menu", item: absolute("menu/") },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Menu",
+    "@id": `${SITE_URL}/menu/#menu`,
+    name: "Dine-in and take-out menu",
+    inLanguage: "en",
+    hasMenuSection: dineIn.map((s) => ({
+      "@type": "MenuSection",
+      name: s.title,
+      hasMenuItem: s.items.map((i) => ({
+        "@type": "MenuItem",
+        name: i.name,
+        ...(i.desc ? { description: i.desc } : {}),
+        ...(offers(i) ? { offers: offers(i) } : {}),
+        ...(i.tags?.includes("Vegan") ? { suitableForDiet: "https://schema.org/VeganDiet" } : {}),
+      })),
+    })),
+  },
+];
+---
+<Layout
+  title="Menu | Masrawy Egyptian Kitchen, Mississauga"
+  description="The full Masrawy menu with prices: koshary, hawawshi, kebda Eskandarani, macarona bechamel, molokhia, lamb shank fatta, grills, fish and kids' plates. 100% halal, in Mississauga."
+  path="menu/"
+  current="menu"
+  schema={schema}
+>
+<main class="page">
+  <section class="page-hero has-photo">
+    <div class="wrap">
+      <div>
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>Menu</nav>
+        <span class="ar-mark" lang="ar">المنيو</span>
+        <h1>The menu, <em>with prices.</em></h1>
+        <p class="lede">Egyptian soul food, dine-in or take-out. Everything is 100% halal; the beef is grass-fed and local, the chicken corn-fed, the fish wild. Vegan dishes are marked.</p>
+        <div class="hero-ctas"><a class="btn btn-solid" href={orderUrl} target="_blank" rel="noopener">Order for pick-up</a><a class="btn btn-dark" href={url("brunch/")}>Brunch menu</a></div>
+      </div>
+      <div class="hero-photo"><img src={url("assets/img/spread-grill.webp")} alt="A Masrawy mixed grill spread with rice, dips and bread" loading="eager" /></div>
+    </div>
+  </section>
+
+  <nav class="menu-nav" aria-label="Menu sections">
+    <ul>{dineIn.map((s) => <li><a href={`#${s.id}`}>{s.title}</a></li>)}</ul>
+  </nav>
+
+  <div class="wrap">
+    {dineIn.map((s) => (
+      <section class="menu-section" id={s.id}>
+        <div class="menu-head">
+          <h2>{s.title}{s.ar && <span class="ar" lang="ar">{s.ar}</span>}</h2>
+          {s.price && <span class="pricing">{s.price}</span>}
+        </div>
+        {s.note && <p class="menu-note">{s.note}</p>}
+        <div class="menu-items">
+          {s.items.map((i) => (
+            <div class="menu-item">
+              <div class="names">
+                <h3>{i.slug ? <a href={url(`dishes/${i.slug}/`)}>{i.name}</a> : i.name}</h3>
+                {i.ar && <span class="ar" lang="ar">{i.ar}</span>}
+                {i.tags?.map((t) => <span class={tagClass(t)}>{t}</span>)}
+              </div>
+              <span class="price">{i.price ?? ""}</span>
+              {i.desc && <p>{i.desc}</p>}
+              {i.addons && <span class="addons">{i.addons}</span>}
+              {i.confirm && <Fragment set:html={`<!-- CONFIRM: ${i.name}: ${i.confirm} -->`} />}
+            </div>
+          ))}
+        </div>
+      </section>
+    ))}
+    <p class="micro" style="margin:28px 0 0">Prices from the current printed menu; subject to applicable taxes and may change without notice. Tell your server about allergies. Dessert prices on request.<!-- CONFIRM: dessert prices --></p>
+  </div>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="band-cta" style="border-radius:8px">
+        <h2>Order ahead, pick up on Britannia Road.</h2>
+        <p>Order online for pick-up at Britannia Road, or call {phone} for groups and large orders.</p>
+        <div class="hero-ctas"><a class="btn btn-solid btn-lg" href={orderUrl} target="_blank" rel="noopener">Order online</a><a class="btn btn-ghost btn-lg" href={phoneHref}>Call the restaurant</a></div>
+        <!-- CONFIRM: typical pick-up time, if the client wants it stated -->
+      </div>
+    </div>
+  </section>
+</main>
+</Layout>

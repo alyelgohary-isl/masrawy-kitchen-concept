@@ -1,0 +1,65 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { orderUrl } from "@/site.config";
+import { url, absolute } from "@/lib/url";
+import { dishes } from "@/data/dishes";
+
+export function getStaticPaths() {
+  return dishes.map((d) => ({ params: { slug: d.slug }, props: { dish: d } }));
+}
+const { dish } = Astro.props;
+const others = dishes.filter((d) => d.slug !== dish.slug);
+const schema = [
+  { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: absolute() },
+    { "@type": "ListItem", position: 2, name: "Menu", item: absolute("menu/") },
+    { "@type": "ListItem", position: 3, name: dish.name, item: absolute(`dishes/${dish.slug}/`) },
+  ] },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: [{ "@type": "Question", name: dish.question, acceptedAnswer: { "@type": "Answer", text: dish.short } }, ...dish.faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } }))] },
+  { "@context": "https://schema.org", "@type": "MenuItem", name: dish.name, description: dish.short, image: absolute(`assets/img/${dish.img}.webp`), offers: { "@type": "Offer", price: dish.price.replace("$", ""), priceCurrency: "CAD" } },
+];
+---
+<Layout
+  title={`${dish.question} | ${dish.name} at Masrawy, Mississauga`}
+  description={dish.short}
+  path={`dishes/${dish.slug}/`}
+  current="menu"
+  ogImage={`assets/img/${dish.img}.webp`}
+  schema={schema}
+>
+<main class="page">
+  <section class="page-hero has-photo dish-hero">
+    <div class="wrap">
+      <div>
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span><a href={url("menu/")}>Menu</a><span>/</span>{dish.name}</nav>
+        <span class="ar-mark" lang="ar">{dish.ar}</span>
+        <h1>{dish.question}</h1>
+        <p class="answer">{dish.short}</p>
+        <div class="dish-meta">
+          <div><b>{dish.price}</b>at Masrawy</div>
+          <div><b>100% halal</b>every dish</div>
+        </div>
+        <div class="hero-ctas"><a class="btn btn-solid" href={orderUrl} target="_blank" rel="noopener">Order for pick-up</a><a class="btn btn-dark" href={url("menu/")}>Full menu</a></div>
+      </div>
+      <div class="hero-photo round"><img src={url(`assets/img/${dish.img}.webp`)} alt={dish.alt} loading="eager" /></div>
+    </div>
+  </section>
+
+  <section class="section no-top">
+    <div class="wrap-narrow prose">
+      {dish.body.map((p) => <p>{p}</p>)}
+      <h2>At Masrawy</h2>
+      <p>{dish.atMasrawy}</p>
+    </div>
+  </section>
+
+  <section class="section paper">
+    <div class="wrap-narrow">
+      <span class="eyebrow">Questions</span>
+      <div class="faq" style="margin-top:16px">{dish.faq.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}</div>
+      <span class="eyebrow" style="margin-top:40px">More Egyptian dishes</span>
+      <div class="related">{others.map((o) => <a href={url(`dishes/${o.slug}/`)}>{o.name}</a>)}</div>
+    </div>
+  </section>
+</main>
+</Layout>

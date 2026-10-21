@@ -1,0 +1,71 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { site, phone, phoneHref, hours, brunchHours } from "@/site.config";
+import { url, absolute } from "@/lib/url";
+
+const schema = [
+  { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: absolute() },
+    { "@type": "ListItem", position: 2, name: "Reserve", item: absolute("reserve/") },
+  ] },
+];
+---
+<Layout
+  title="Reserve a Table | Masrawy Egyptian Kitchen, Mississauga"
+  description="Request a table for eight or more at Masrawy Egyptian Kitchen in Mississauga. Smaller parties walk in. Open daily from 10am."
+  path="reserve/"
+  schema={schema}
+>
+<main class="page">
+  <section class="page-hero">
+    <div class="wrap">
+      <div>
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>Reserve</nav>
+        <span class="ar-mark" lang="ar">احجز</span>
+        <h1>Tables for <em>eight or more.</em></h1>
+        <p class="lede">We hold tables for parties of eight and up. Smaller groups are first come, first served, and the room turns quickly. For tonight, call {phone}; for a date ahead, the form works.</p>
+        <!-- CONFIRM: reservation policy wording; whether a booking platform (OpenTable, Resy) should replace this form -->
+      </div>
+    </div>
+  </section>
+
+  <section class="section no-top">
+    <div class="wrap form-layout">
+      <div class="sticky reveal">
+        <span class="eyebrow">Hours</span>
+        <table class="hours">
+          {hours.map((h) => <tr><td>{h.days}</td><td>{h.open} – {h.close}</td></tr>)}
+          <tr><td>Brunch</td><td>{brunchHours}</td></tr>
+        </table>
+        <p class="ink-soft" style="margin-top:18px">Weekend brunch and Friday and Saturday dinners are the busiest. Thirty or more? <a href={url("the-room/")}>Book the semi-private room</a>.</p>
+        <dl class="contact-details"><div><dt>Phone</dt><dd><a href={phoneHref}>{phone}</a></dd></div><div><dt>Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div></dl>
+      </div>
+      <div>
+        <form class="form reveal" method="post" data-form="reservation" data-form-type="reserve">
+          <div class="row">
+            <div class="field"><label for="first_name">First name*</label><input id="first_name" name="first_name" required /></div>
+            <div class="field"><label for="last_name">Last name*</label><input id="last_name" name="last_name" required /></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="phone">Phone*</label><input id="phone" type="tel" name="phone" required /></div>
+            <div class="field"><label for="email">Email*</label><input id="email" type="email" name="email" required /></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="date">Date*</label><input id="date" type="date" name="date" required /></div>
+            <div class="field"><label for="time">Time*</label><input id="time" type="time" name="time" required /></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="guests">Guests* (8 or more)</label><input id="guests" type="number" min="8" max="60" name="guests" required /></div>
+            <div class="field"><label for="occasion">Occasion</label><input id="occasion" name="occasion" placeholder="Birthday, family dinner…" /></div>
+          </div>
+          <div class="field"><label for="message">Anything else</label><textarea id="message" name="message" placeholder="High chairs, allergies, a cake…"></textarea></div>
+          <label class="check"><input type="checkbox" name="consent" value="yes" required /> <span>I understand this is a request; the table is confirmed when Masrawy calls or emails back.</span></label>
+          <button class="btn btn-solid btn-lg" type="submit">Request a table</button>
+          <p class="micro recaptcha-note">This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.</p>
+        </form>
+        <div class="form-success"><h3>Request received.</h3><p>We'll confirm by phone or email. If you don't hear from us within a few hours on the day, call {phone}.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+</Layout>

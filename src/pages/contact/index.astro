@@ -1,0 +1,94 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { site, phone, phoneHref, address, hours, brunchHours, mapsUrl, mapsEmbed, orderUrl } from "@/site.config";
+import { url, absolute } from "@/lib/url";
+
+const reasons = [
+  { value: "Reservation", title: "Reserve a table", body: "Parties of eight or more. Smaller tables are first come, first served.", link: "Request a table" },
+  { value: "Catering", title: "Catering", body: "Corporate lunches, weddings, iftars, the food truck.", link: "Ask for a quote" },
+  { value: "Private event", title: "Private event", body: "The semi-private room for thirty, or the whole restaurant.", link: "Book the room" },
+  { value: "General", title: "Something else", body: "Feedback, press, suppliers, jobs.", link: "Say hello" },
+];
+const faq = [
+  { q: "Does Masrawy take reservations?", a: "Yes, for parties of eight or more. Call or use the form to request a table; smaller groups walk in." },
+  { q: "Is there a patio?", a: "Yes, a summer patio, weather permitting." },
+  { q: "Is everything halal?", a: "Yes. Every dish is 100% halal." },
+  { q: "Do you deliver?", a: "Order online for pick-up from the restaurant. Catering orders over $300 can be delivered across the GTA." },
+];
+// CONFIRM: parking, delivery apps if any
+const schema = [
+  { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: absolute() },
+    { "@type": "ListItem", position: 2, name: "Contact", item: absolute("contact/") },
+  ] },
+  { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) },
+];
+---
+<Layout
+  title="Contact & Hours | Masrawy Egyptian Kitchen, Mississauga"
+  description="Masrawy Egyptian Kitchen, 2275 Britannia Rd W, Mississauga. Open daily from 10am; brunch until 2pm. Call (647) 654-4444 for reservations of eight or more, catering and events."
+  path="contact/"
+  schema={schema}
+>
+<main class="page">
+  <section class="page-hero">
+    <div class="wrap">
+      <div>
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href={url()}>Home</a><span>/</span>Contact</nav>
+        <span class="ar-mark" lang="ar">اتصل بنا</span>
+        <h1>Britannia Road West, <em>two minutes off the 401.</em></h1>
+        <p class="lede">Open every day from ten. Call for tables of eight or more; everyone else, come on in.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section no-top">
+    <div class="wrap visit">
+      <div class="reveal">
+        <dl class="contact-details" style="margin-top:0">
+          <div><dt>Address</dt><dd><a href={mapsUrl} target="_blank" rel="noopener">{address.street}, {address.city}, {address.region} {address.postal}</a></dd></div>
+          <div><dt>Phone</dt><dd><a href={phoneHref}>{phone}</a></dd></div>
+          <div><dt>Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+        </dl>
+        <table class="hours">
+          {hours.map((h) => <tr><td>{h.days}</td><td>{h.open} – {h.close}</td></tr>)}
+          <tr><td>Brunch</td><td>{brunchHours}</td></tr>
+        </table>
+        <div class="hero-ctas"><a class="btn btn-solid" href={orderUrl} target="_blank" rel="noopener">Order online</a><a class="btn btn-dark" href={mapsUrl} target="_blank" rel="noopener">Get directions</a></div>
+      </div>
+      <iframe class="map reveal" src={mapsEmbed} title={`Map to ${site.name}`} loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+    </div>
+  </section>
+
+  <section class="section tight">
+    <div class="wrap">
+      <div class="route-cards">
+        {reasons.map((r) => <button class="route-card reveal" type="button" data-reason={r.value}><h3>{r.title}</h3><p>{r.body}</p><span class="link-arrow">{r.link} →</span></button>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section paper" id="form">
+    <div class="wrap form-layout">
+      <div class="sticky reveal">
+        <span class="eyebrow">Get in touch</span>
+        <h2 style="margin-top:0.8rem">Send us a message.</h2>
+        <p class="ink-soft" style="margin-top:1rem;font-size:1.05rem">For same-day tables, call. For everything else, the form reaches the team directly.</p><!-- CONFIRM: reply time -->
+        <div class="faq" style="margin-top:28px">{faq.map((f) => <details><summary style="font-size:1.05rem">{f.q}</summary><p>{f.a}</p></details>)}</div>
+      </div>
+      <div>
+        <form class="form reveal" method="post" data-form="contact" data-form-type="contact">
+          <div class="row"><div class="field"><label for="first_name">First name*</label><input id="first_name" name="first_name" type="text" required /></div><div class="field"><label for="last_name">Last name*</label><input id="last_name" name="last_name" type="text" required /></div></div>
+          <div class="row"><div class="field"><label for="email">Email*</label><input id="email" name="email" type="email" required /></div><div class="field"><label for="phone">Phone</label><input id="phone" name="phone" type="tel" /></div></div>
+          <div class="field"><label for="reason">I'm reaching out about*</label><select id="reason" name="reason" required><option value="" disabled selected>Select…</option>{reasons.map((r) => <option value={r.value}>{r.title}</option>)}</select></div>
+          <div class="field"><label for="message">Message*</label><textarea id="message" name="message" required placeholder="Date, number of guests, anything we should know"></textarea></div>
+          <label class="check"><input type="checkbox" name="consent" value="yes" required /> <span>I'm happy for Masrawy to contact me about this message.</span></label>
+          <button class="btn btn-solid btn-lg" type="submit">Send message</button>
+          <p class="micro recaptcha-note">This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.</p>
+        </form>
+        <div class="form-success"><h3>Thanks for reaching out.</h3><p>We'll be in touch soon.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+</Layout>

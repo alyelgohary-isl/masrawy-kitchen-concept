@@ -1,0 +1,51 @@
+---
+import { site, phone, phoneHref, address, hours, brunchHours, social, mapsUrl } from "../site.config";
+import { url } from "../lib/url";
+
+const [ar, en] = site.brand;
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="brand" href={url()}><span class="brand-ar" lang="ar">{ar}</span><span class="brand-en">{en}</span></a>
+        <p>{site.description}</p>
+        <address>
+          <a href={mapsUrl} target="_blank" rel="noopener">{address.street}<br />{address.city}, {address.region} {address.postal}</a>
+          <a href={phoneHref}>{phone}</a>
+        </address>
+        <dl class="footer-hours">
+          {hours.map((h) => <div><dt>{h.short}</dt><dd>{h.open} – {h.close}</dd></div>)}
+          <div><dt>Brunch</dt><dd>{brunchHours}</dd></div>
+        </dl>
+      </div>
+      {site.footer.columns.map((col) => (
+        <div class="footer-col">
+          <h3>{col.title}</h3>
+          <ul>
+            {col.links.map((link) => <li><a href={url(link.href)}>{link.label}</a></li>)}
+          </ul>
+        </div>
+      ))}
+      <div class="footer-col footer-news">
+        <h3>Follow along</h3>
+        <ul class="social">
+          <li><a href={social.instagram} target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href={social.tiktok} target="_blank" rel="noopener">TikTok</a></li>
+          <li><a href={social.facebook} target="_blank" rel="noopener">Facebook</a></li>
+        </ul>
+        <p>{site.footer.newsletter}</p>
+        <form class="news-form" novalidate="false">
+          <label class="visually-hidden" for="news-email">Email</label>
+          <input id="news-email" type="email" name="email" placeholder="Email address" required />
+          <button class="btn btn-solid btn-sm" type="submit">Subscribe</button>
+        </form>
+        <div class="form-success" style="margin-top:0.8rem;padding:0.9rem 1rem"><p>You're on the list.</p></div>
+      </div>
+    </div>
+    <div class="footer-legal">
+      <p>&copy; {year} {site.name}. All rights reserved. {site.footer.legal} 100% halal. Prices subject to change without notice.</p>
+    </div>
+  </div>
+</footer>
