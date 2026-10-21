@@ -7,7 +7,7 @@
 export const sources = {
   screen:  { dir: "frames/screen",  prefix: "sc_", count: 31 },  // only the first 2.5 s of the glide are used (and downloaded)   // C1 16:9: slow glide into the semi-private room toward the arabesque wall (from their photo H-21)
   coffee:  { dir: "frames/coffee",  prefix: "cf_", count: 61 },   // C2 1:1: coffee pours from the kanaka, steam (from V-26); floats on the ground
-  koshary: { dir: "frames/koshary", prefix: "ko_", count: 61 },   // C3 1:1: empty bowl fills layer by layer, ends on their koshary photo (V-09)
+  koshary: { dir: "frames/koshary", prefix: "ko_", count: 61 },   // C3 1:1: a ladle of tomato sauce poured over their koshary photo (V-09); replaced the "bowl builds" clip 2026-10-21
   tahina:  { dir: "frames/tahina",  prefix: "ta_", count: 61 },   // C4 1:1: tahina pours over kofta (from V-47)
   hands:   { dir: "frames/hands",   prefix: "ha_", count: 61 },   // C5: hands reach into the shared spread (from 343A9195)
   night:   { dir: "frames/night",   prefix: "ni_", count: 61 },   // C6: the room from lunch to lantern hour (H-19 → generated night edit)
@@ -24,7 +24,7 @@ export const timeline: Segment[] = [
   { id: "coffee",  units: 0.7,  from: ["coffee", 0],  to: ["coffee", 60] }, // coffee from the kanaka
   { id: "h2",      units: 0.2,  hold: ["coffee", 60] },
   { id: "c2",      units: 0.2,  cut: true },
-  { id: "koshary", units: 0.8,  from: ["koshary", 0], to: ["koshary", 60] },// the bowl builds
+  { id: "koshary", units: 0.8,  from: ["koshary", 0], to: ["koshary", 60] },// the sauce goes on
   { id: "h3",      units: 0.25, hold: ["koshary", 60] },
   { id: "c3",      units: 0.2,  cut: true },
   { id: "tahina",  units: 0.65, from: ["tahina", 0],  to: ["tahina", 48] }, // tahina over kofta (frames 49–60 morph the jug; unused)
