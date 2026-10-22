@@ -1,0 +1,1 @@
+var e=(e,t,n=`webp`)=>`${e}${String(t+1).padStart(4,`0`)}.${n}`;function t(e){return new Promise(t=>{let n=new Image;n.onload=()=>t(n),n.onerror=()=>t(null),n.src=e})}export{t as n,e as t};
