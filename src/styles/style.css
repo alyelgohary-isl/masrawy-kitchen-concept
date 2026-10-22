@@ -115,7 +115,7 @@ body.film .site-header.solid { background: rgba(241, 235, 225, 0.86); border-bot
 .site-nav a { text-decoration: none; opacity: 0.8; }
 .site-nav a:hover, .site-nav a[aria-current="page"] { opacity: 1; }
 .site-nav a[aria-current="page"] { text-decoration: underline; text-underline-offset: 6px; text-decoration-color: var(--gold); }
-.site-nav .nav-extra, .site-nav .nav-ctas { display: none; }
+.site-nav .nav-extra, .site-nav .nav-ctas, .site-nav .nav-foot, .site-nav .nav-ar { display: none; }
 .header-right { display: flex; align-items: center; gap: 10px; }
 .nav-toggle { display: none; width: 44px; height: 44px; border: 0; background: none; color: inherit; cursor: pointer; position: relative; }
 .nav-toggle span, .nav-toggle span::before, .nav-toggle span::after { content: ""; position: absolute; left: 11px; width: 22px; height: 1.5px; background: currentColor; transition: transform 0.3s, top 0.3s, opacity 0.3s; }
@@ -129,32 +129,47 @@ body.nav-open .nav-toggle span::after { top: 0; transform: rotate(-45deg); }
   .site-nav { position: fixed; inset: var(--header-h) 0 0 0; z-index: 49; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 0; padding: 24px var(--gutter) 120px; background: var(--cream); color: var(--ink); transform: translateY(-8px); opacity: 0; pointer-events: none; transition: opacity 0.3s, transform 0.3s; overflow: auto; }
   body.nav-open .site-nav { opacity: 1; transform: none; pointer-events: auto; }
   .site-nav a { font-family: var(--font-display); font-size: 2rem; padding: 12px 0; opacity: 1; border-bottom: 1px solid var(--hair); width: 100%; }
-  .site-nav .nav-extra { display: block; }
+  .site-nav .nav-extra { display: flex; }
   .site-nav .nav-ctas { display: flex; gap: 10px; margin-top: 24px; }
   .site-nav .nav-ctas a { font: 500 0.9rem/1 var(--font-body); border-bottom: 0; width: auto; padding: 13px 20px; }
+  /* phone menu: each page with its Arabic mark, full-width actions, then hours and the address */
+  .site-nav > a { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+  .site-nav .nav-ar { display: inline; font-family: var(--font-arabic); font-size: 1.35rem; color: var(--gold); }
+  .site-nav .nav-ctas { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
+  .site-nav .nav-ctas a { padding: 16px 12px; font-size: 0.95rem; }
+  .site-nav .nav-foot { display: grid; gap: 6px; width: 100%; margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--hair); font-size: 0.92rem; color: var(--ink-soft); }
+  .site-nav .nav-foot p span { display: inline-block; min-width: 5.5em; color: var(--gold-2); font-weight: 500; }
+  .site-nav .nav-foot a { font: inherit; padding: 0; border: 0; text-decoration: underline; text-decoration-color: var(--hair); text-underline-offset: 4px; }
+  body.nav-open .site-nav > a, body.nav-open .site-nav > div { animation: nav-in 0.5s cubic-bezier(.2,.7,.2,1) both; }
+  body.nav-open .site-nav > :nth-child(2) { animation-delay: 0.03s; } body.nav-open .site-nav > :nth-child(3) { animation-delay: 0.06s; }
+  body.nav-open .site-nav > :nth-child(4) { animation-delay: 0.09s; } body.nav-open .site-nav > :nth-child(5) { animation-delay: 0.12s; }
+  body.nav-open .site-nav > :nth-child(6) { animation-delay: 0.15s; } body.nav-open .site-nav > :nth-child(7) { animation-delay: 0.18s; }
+  body.nav-open .site-nav > :nth-child(n+8) { animation-delay: 0.22s; }
   .header-right .header-cta { display: none; }
   .nav-toggle { display: block; }
   body.nav-open { overflow: hidden; }
   body.nav-open .site-header, body.film.nav-open .site-header { color: var(--ink); background: var(--cream); border-bottom-color: var(--hair); pointer-events: auto; backdrop-filter: none; -webkit-backdrop-filter: none; }
 }
 
+@keyframes nav-in { from { opacity: 0; transform: translateY(12px); } }
+@media (prefers-reduced-motion: reduce) { body.nav-open .site-nav > * { animation: none !important; } }
+
 /* ——— Film beats (over the full-bleed film) ———
    The canvas paints a cream scrim under the copy column (scroll-film.js, scrim), so the copy
    is ink on paper even over a wide frame. Square clips float on the cream ground already. */
 .band-section .eyebrow { color: var(--gold); margin-bottom: 18px; }
-.hero-heading { font-size: clamp(2.8rem, 6vw, 5.6rem); line-height: 1; color: var(--ink); }
+.hero-heading { font-size: clamp(2.8rem, min(8.4vw, 14vh), 8.4rem); line-height: 0.92; letter-spacing: -0.02em; color: var(--ink); }
 .hero-heading .line { display: block; }
 .hero-tagline { margin-top: 22px; font-family: var(--font-display); font-size: clamp(1.15rem, 1.8vw, 1.5rem); line-height: 1.4; color: var(--ink-soft); }
 .hero-tagline span { display: block; }
 .beat-copy { max-width: 30rem; }
 /* wide-frame beats: the copy sits on a solid cream panel with a hairline edge; the photograph stays crisp around it */
 .band-section.on-photo .hero-inner, .band-section.on-photo .beat-copy { background: var(--cream); border: 1px solid var(--hair); padding: 30px 34px 32px; box-shadow: 0 24px 60px -30px rgba(35, 40, 47, 0.35); }
-.band-section.on-photo .hero-inner { padding: 36px 40px 40px; width: clamp(20rem, 42vw, 37rem); }
-@media (max-width: 860px) { .band-section.on-photo .hero-inner, .band-section.on-photo .beat-copy { background: none; border: 0; padding: 0; box-shadow: none; } }
+.band-section.on-photo .hero-inner { padding: 40px 44px 44px; width: auto; max-width: min(46rem, 60vw); }
 .beat-index { display: block; font-family: var(--font-arabic); font-size: clamp(1.6rem, 2.6vw, 2.2rem); line-height: 1; color: var(--gold); margin-bottom: 14px; }
 .beat-price { display: block; margin-top: 14px; font-family: var(--font-display); font-size: 1.1rem; color: var(--gold-2); }
-.beat-heading { font-size: clamp(1.8rem, 3.2vw, 2.8rem); color: var(--ink); }
-.beat-body { margin-top: 12px; max-width: 38ch; color: var(--ink-soft); font-size: clamp(1.02rem, 1.3vw, 1.12rem); line-height: 1.5; }
+.beat-heading { font-size: clamp(1.8rem, 3.6vw, 3.4rem); line-height: 1.05; color: var(--ink); }
+.beat-body { margin-top: 14px; max-width: 38ch; color: var(--ink-soft); font-size: clamp(1.02rem, 1.4vw, 1.22rem); line-height: 1.5; }
 .beat-copy .hero-ctas { margin-top: 22px; }
 .beat-quote { max-width: 34rem; }
 .beat-quote p { font-family: var(--font-display); font-size: clamp(1.25rem, 2vw, 1.7rem); line-height: 1.35; color: var(--ink); font-variation-settings: "opsz" 96, "SOFT" 50; }
@@ -164,6 +179,31 @@ body.nav-open .nav-toggle span::after { top: 0; transform: rotate(-45deg); }
   .hero-heading { font-size: 2.8rem; }
   .beat-index { font-size: 1.6rem; margin-bottom: 10px; }
   .beat-quote p { font-size: 1.15rem; }
+}
+/* Phones: every frame covers the screen (scroll-film.js); the copy rides a cream sheet docked
+   above the action bar, so the photograph owns the screen and the words stay ink on paper.
+   The hero's H1 runs the full width of the sheet. */
+@media (max-aspect-ratio: 21/20) {   /* mirrors scroll-film.js: frames cover the screen when it isn't landscape */
+  body.film .site-header .brand { background: var(--cream); border: 1px solid var(--hair); border-radius: 999px; padding: 8px 14px 8px 12px; }
+  body.film .site-header .nav-toggle { background: var(--cream); border: 1px solid var(--hair); border-radius: 999px; }
+  body.film .site-header .nav-toggle span { left: 10px; }
+  body.film .site-header.solid .brand, body.film .site-header.solid .nav-toggle, body.film.nav-open .site-header .brand, body.film.nav-open .site-header .nav-toggle { background: none; border-color: transparent; }
+  .band .band-section { justify-content: flex-end; padding: 0 10px calc(84px + env(safe-area-inset-bottom)); }
+  .band-section .beat-copy, .band-section .hero-inner, .band-section.on-photo .beat-copy, .band-section.on-photo .hero-inner {
+    width: 100%; max-width: none; background: var(--cream); border: 1px solid var(--hair); border-radius: 22px;
+    padding: 20px 20px 22px; box-shadow: 0 18px 50px -24px rgba(35, 40, 47, 0.45);
+  }
+  .band-section.on-photo .hero-inner { padding: 18px 20px 20px; }
+  .hero-heading { font-size: min(27vw, 11.5vh, 8rem); line-height: 0.9; letter-spacing: -0.025em; }
+  .hero-tagline { margin-top: 14px; font-size: 1.12rem; line-height: 1.35; }
+  .hero-inner .hero-ctas { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 18px; }
+  .hero-inner .hero-ctas .btn { justify-content: center; padding: 14px 10px; font-size: 0.9rem; }
+  .hero-inner .hero-ctas .btn-solid { grid-column: 1 / -1; }
+  .beat-index { font-size: 1.4rem; margin-bottom: 8px; }
+  .beat-heading { font-size: 1.75rem; line-height: 1.08; }
+  .beat-body { margin-top: 8px; font-size: 0.98rem; line-height: 1.45; }
+  .beat-price { margin-top: 10px; font-size: 1.02rem; }
+  .beat-copy .hero-ctas { margin-top: 16px; }
 }
 
 /* the cut between two clips: ground, a gold rule drawn across, the next chapter's label */
@@ -197,6 +237,8 @@ body.nav-open .nav-toggle span::after { top: 0; transform: rotate(-45deg); }
 
 /* scrub heroes on inner pages: a sticky canvas the page scrolls through */
 .scrub-runway { position: relative; height: 320vh; }
+/* the hero runs under the fixed header, so its sticky screen is exactly the viewport */
+.page > .scrub-runway:first-child { margin-top: calc(-1 * var(--header-h)); }
 .scrub-hero { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1fr); align-items: end; isolation: isolate; }
 .scrub-hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -2; }
 .scrub-hero.square canvas { inset: auto; left: 62%; top: 50%; width: min(100vw, 100vh); height: min(100vw, 100vh); transform: translate(-50%, -50%); }
@@ -214,9 +256,15 @@ body.nav-open .nav-toggle span::after { top: 0; transform: rotate(-45deg); }
 .scrub-hint { position: absolute; right: var(--gutter); bottom: 28px; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); background: var(--cream); border: 1px solid var(--hair); padding: 6px 10px; }
 @media (max-width: 800px) {
   .scrub-runway { height: 260vh; }
-  .scrub-hero .wrap, .scrub-hero.square .wrap { align-self: end; padding-bottom: 100px; }
-  .scrub-copy { padding: 22px 20px 18px; }
-  .scrub-hero.square canvas { inset: auto; left: 50%; top: 36%; width: 100vw; height: 100vw; }
+  /* phones: the photograph covers the screen and the copy rides a cream sheet above the action bar, as on the home film */
+  .scrub-hero .wrap, .scrub-hero.square .wrap { align-self: end; padding: 0 10px calc(84px + env(safe-area-inset-bottom)); }
+  .scrub-copy { padding: 20px 20px 20px; border-radius: 22px; box-shadow: 0 18px 50px -24px rgba(35, 40, 47, 0.45); }
+  .scrub-hero.square canvas { inset: 0; width: 100%; height: 100%; transform: none; }
+  .scrub-hero .breadcrumbs, .scrub-hint { display: none; }
+  .scrub-hero .ar-mark { font-size: 1.6rem; margin-bottom: 6px; }
+  .scrub-hero h1 { font-size: clamp(2.2rem, 10.5vw, 3rem); line-height: 1; }
+  .scrub-hero .lede { font-size: 0.98rem; line-height: 1.45; margin-top: 10px; }
+  .scrub-hero .hero-ctas { margin-top: 16px; }
   .dial { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
   .dial li { font-size: 0.62rem; letter-spacing: 0.08em; padding: 8px 12px 8px 0; min-width: 0; }
     }
@@ -246,7 +294,16 @@ body.nav-open .nav-toggle span::after { top: 0; transform: rotate(-45deg); }
 .home-gallery a { display: block; aspect-ratio: 1; overflow: hidden; border-radius: 4px; background: var(--paper); }
 .home-gallery img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s cubic-bezier(.2,.7,.2,1); }
 .home-gallery a:hover img { transform: scale(1.04); }
-@media (max-width: 700px) { .home-gallery { grid-template-columns: repeat(2, 1fr); gap: 8px; } }
+/* phones: the gallery and the reviews become swipe rows that run to the screen edge; each photo nearly fills the width */
+@media (max-width: 700px) {
+  .home-gallery, #reviews .reviews { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; margin: 24px calc(-1 * var(--gutter)) 0; padding: 0 var(--gutter) 6px; scroll-padding: 0 var(--gutter); scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .home-gallery::-webkit-scrollbar, .reviews::-webkit-scrollbar { display: none; }
+  .home-gallery a { flex: 0 0 84vw; aspect-ratio: 4 / 5; scroll-snap-align: start; border-radius: 14px; }
+  #reviews .reviews li { flex: 0 0 84vw; scroll-snap-align: start; border-radius: 14px; padding: 22px 20px 20px; }
+  #reviews .reviews p { display: -webkit-box; -webkit-line-clamp: 8; -webkit-box-orient: vertical; overflow: hidden; }
+  .reveal.in .home-gallery, .home-gallery .reveal, .reviews .reveal { transition-delay: 0s; }
+  .story-grid .year { font-size: 2rem; margin-bottom: 6px; }
+}
 .reviews { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-top: 32px; }
 .reviews li { background: var(--paper); border: 1px solid var(--hair-2); border-radius: 6px; padding: 26px 26px 22px; display: grid; align-content: start; gap: 12px; }
 .reviews h3 { font-size: 1.3rem; line-height: 1.25; }
@@ -448,3 +505,24 @@ body.nav-open .nav-toggle span::after { top: 0; transform: rotate(-45deg); }
 .action-bar a { text-align: center; padding: 12px 6px; border-radius: 11px; font-size: 0.84rem; font-weight: 500; text-decoration: none; }
 .action-bar a.solid { background: var(--gold); color: #fff; }
 @media (max-width: 900px) { .action-bar { display: grid; } body.nav-open .action-bar { display: none; } }
+/* portrait tablets: the same sheet, held to a readable measure, with tablet-sized type */
+@media (max-aspect-ratio: 21/20) and (min-width: 700px) {
+  .band .band-section { padding: 0 var(--gutter) calc(84px + env(safe-area-inset-bottom)); }
+  .band-section .beat-copy, .band-section .hero-inner, .band-section.on-photo .beat-copy, .band-section.on-photo .hero-inner { max-width: 36rem; padding: 28px 30px 30px; }
+  .hero-heading { font-size: min(13vw, 9vh, 8rem); }
+  .hero-tagline { font-size: 1.3rem; }
+  .beat-heading { font-size: 2.4rem; }
+  .beat-body { font-size: 1.1rem; }
+}
+@media (max-aspect-ratio: 21/20) and (min-width: 901px) { .band .band-section { padding-bottom: 40px; } }
+/* phones held sideways: the screen is too short for the bar and the film copy together */
+@media (orientation: landscape) and (max-height: 500px) {
+  .action-bar { display: none !important; }
+  body.film .site-header:not(.solid) .brand, body.film .site-header:not(.solid) .nav-toggle { background: var(--cream); border: 1px solid var(--hair); border-radius: 999px; }
+  body.film .site-header:not(.solid) .brand { padding: 8px 14px 8px 12px; }
+  .band .band-section { justify-content: center; padding-top: 64px; padding-bottom: 12px; }
+  .band-section.on-photo .hero-inner { padding: 18px 24px 20px; }
+  .hero-heading { font-size: 2.6rem; }
+  .hero-tagline { margin-top: 10px; font-size: 1rem; }
+  .hero-ctas { margin-top: 14px; }
+}

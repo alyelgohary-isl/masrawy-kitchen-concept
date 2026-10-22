@@ -33,7 +33,8 @@ type Segment =
   | { id: string; units: number; cut: true; label?: string; ar?: string };
 
 interface Props {
-  sources: Record<string, { dir: string; prefix: string; count: number; ext?: string }>;
+  /** focus: the point [x, y] (fractions) a frame is cropped around when it covers a portrait screen */
+  sources: Record<string, { dir: string; prefix: string; count: number; ext?: string; focus?: [number, number] }>;
   timeline: Segment[];
   /** Frames loaded before the loader lifts, as a frame reference: everything up to it */
   preload: FrameRef;
@@ -162,7 +163,8 @@ const vars = [
   .loader-percent { font-size: 0.8rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
 
   /* Canvas */
-  .canvas-wrap { position: fixed; inset: 0; z-index: 1; }
+  /* 100lvh: the canvas keeps one size while the phone URL bar comes and goes */
+  .canvas-wrap { position: fixed; top: 0; left: 0; right: 0; height: 100vh; height: 100lvh; z-index: 1; }
   .canvas-wrap canvas { width: 100%; height: 100%; display: block; }
 
   .film-overlay {

@@ -50,11 +50,11 @@ export const site = {
   ogImage: "assets/img/og.webp",
 
   nav: [
-    { key: "menu", href: "menu/", label: "Menu" },
-    { key: "brunch", href: "brunch/", label: "Brunch" },
-    { key: "room", href: "the-room/", label: "The Room" },
-    { key: "catering", href: "catering/", label: "Catering" },
-    { key: "story", href: "our-story/", label: "Our Story" },
+    { key: "menu", href: "menu/", label: "Menu", ar: "المنيو" },
+    { key: "brunch", href: "brunch/", label: "Brunch", ar: "فطار" },
+    { key: "room", href: "the-room/", label: "The Room", ar: "الصالة" },
+    { key: "catering", href: "catering/", label: "Catering", ar: "كاترينج" },
+    { key: "story", href: "our-story/", label: "Our Story", ar: "حكايتنا" },
   ],
   cta: { label: "Order online", href: orderUrl },
   secondaryCta: { label: "Reserve", href: "reserve/" },

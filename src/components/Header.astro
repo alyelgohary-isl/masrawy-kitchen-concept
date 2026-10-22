@@ -1,5 +1,5 @@
 ---
-import { site, type NavKey } from "../site.config";
+import { site, type NavKey, hours, address, phone, phoneHref, mapsUrl } from "../site.config";
 import { url } from "../lib/url";
 
 interface Props {
@@ -8,18 +8,24 @@ interface Props {
 }
 const { current } = Astro.props;
 const [ar, en] = site.brand;
+const ampm = (t: string) => { const h = parseInt(t, 10); return `${h % 12 || 12}${h < 12 ? "am" : "pm"}`; };
 ---
 <header class="site-header">
   <a class="brand" href={url()} aria-label={site.name}><span class="brand-ar" lang="ar">{ar}</span><span class="brand-en">{en}</span></a>
   <nav class="site-nav" id="site-nav" aria-label="Primary">
     {site.nav.map((item) => (
-      <a href={url(item.href)} aria-current={item.key === current ? "page" : undefined}>{item.label}</a>
+      <a href={url(item.href)} aria-current={item.key === current ? "page" : undefined}>{item.label}<span class="nav-ar" lang="ar">{item.ar}</span></a>
     ))}
-    <a class="nav-extra" href={url("gallery/")}>Gallery</a>
-    <a class="nav-extra" href={url("contact/")}>Contact</a>
+    <a class="nav-extra" href={url("gallery/")}>Gallery<span class="nav-ar" lang="ar">صور</span></a>
+    <a class="nav-extra" href={url("contact/")}>Contact<span class="nav-ar" lang="ar">اتصل بنا</span></a>
     <div class="nav-ctas">
       <a class="btn btn-ghost" href={url(site.secondaryCta.href)}>{site.secondaryCta.label}</a>
       <a class="btn btn-solid" href={site.cta.href} target="_blank" rel="noopener">{site.cta.label}</a>
+    </div>
+    <div class="nav-foot">
+      {hours.map((h) => <p><span>{h.short}</span>{ampm(h.open)} – {ampm(h.close)}</p>)}
+      <a href={mapsUrl} target="_blank" rel="noopener">{address.street}, {address.city}</a>
+      <a href={phoneHref}>{phone}</a>
     </div>
   </nav>
   <div class="header-right">

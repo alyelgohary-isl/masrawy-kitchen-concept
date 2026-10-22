@@ -30,20 +30,26 @@ import { framePath } from "./frames.js";
     let current = -1;
     let dpr = 1;
 
+    // returns false when nothing changed (the phone URL bar coming and going), so the frame isn't cleared and redrawn
     function size() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       const r = canvas.getBoundingClientRect();
-      canvas.width = Math.round(r.width * dpr);
-      canvas.height = Math.round(r.height * dpr);
+      const w = Math.round(r.width * dpr), h = Math.round(r.height * dpr);
+      if (w === canvas.width && h === canvas.height) return false;
+      canvas.width = w;
+      canvas.height = h;
+      return true;
     }
 
-    function draw(img) {
+    function draw(img, alpha = 1) {
       if (!img || !img.naturalWidth) return;
       const cw = canvas.width, ch = canvas.height;
       // cover
       const s = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
       const w = img.naturalWidth * s, h = img.naturalHeight * s;
+      ctx.globalAlpha = alpha;
       ctx.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h);
+      ctx.globalAlpha = 1;
     }
 
     function frameFor(p) {
@@ -51,7 +57,7 @@ import { framePath } from "./frames.js";
         const a = timeline[i - 1], b = timeline[i];
         if (p <= b.p) {
           const t = b.p === a.p ? 0 : (p - a.p) / (b.p - a.p);
-          return Math.round(a.f + t * (b.f - a.f));
+          return a.f + t * (b.f - a.f);   // fractional: the next frame is blended in
         }
       }
       return timeline[timeline.length - 1].f;
@@ -71,10 +77,12 @@ import { framePath } from "./frames.js";
 
     function update() {
       const p = reduced ? 0 : progress();
-      const idx = frameFor(p);
-      if (idx !== current) {
-        current = idx;
-        draw(nearestLoaded(idx));
+      const pos = frameFor(p);
+      if (pos !== current) {
+        current = pos;
+        const i = Math.floor(pos), frac = pos - i;
+        draw(nearestLoaded(i));
+        if (frac > 0.02 && frames[i] && frames[i + 1]) draw(frames[i + 1], frac);
       }
       marks.forEach((m) => m.el.classList.toggle("is-active", p >= m.at));
       // exactly one tab active: the last one passed
@@ -94,14 +102,15 @@ import { framePath } from "./frames.js";
       if (next >= count) return;
       const i = next++;
       const img = new Image();
-      img.onload = () => { frames[i] = img; if (frameFor(progress()) === i || (current < 0 && i === 0)) { current = -1; update(); } loadOne(); };
+      img.onload = () => { frames[i] = img; const f = Math.floor(frameFor(progress())); if (f === i || f + 1 === i || (current < 0 && i === 0)) { current = -1; update(); } loadOne(); };
       img.onerror = () => loadOne();
       img.src = framePath(prefix, i);
     }
     if (!reduced) for (let k = 0; k < 6; k++) loadOne();
 
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", () => { size(); current = -1; update(); });
+    let raf = 0;
+    window.addEventListener("scroll", () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; update(); }); }, { passive: true });
+    window.addEventListener("resize", () => { if (size()) { current = -1; update(); } });
     size();
     update();
   });

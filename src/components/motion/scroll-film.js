@@ -11,6 +11,8 @@ import { smoothScroll } from "./smooth-scroll.js";
 import { framePath, loadImage } from "./frames.js";
 
 gsap.registerPlugin(ScrollTrigger);
+/* The phone's URL bar showing/hiding is a resize; re-measuring the runway on it makes the film jump */
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 document.querySelectorAll("[data-scroll-film]").forEach((root) => initScrollFilm(root, JSON.parse(root.dataset.config)));
 
@@ -25,11 +27,14 @@ function initScrollFilm(root, cfg) {
      "units", normalised to 0..1 here, so adding a clip never breaks the others.
      Band sections reference segments by id: data-seg="clip1:0.15,clip1:0.95". */
   const FILES = [];
+  const SRC = [];      // source key of each frame
   const OFFSET = {};
   for (const [key, src] of Object.entries(cfg.sources)) {
     OFFSET[key] = FILES.length;
-    for (let i = 0; i < src.count; i++) FILES.push(framePath(src.dir + src.prefix, i, src.ext));
+    for (let i = 0; i < src.count; i++) { FILES.push(framePath(src.dir + src.prefix, i, src.ext)); SRC.push(key); }
   }
+  /* Where a frame is cropped around when it covers a portrait screen: [x, y] as fractions of the frame */
+  const focusOf = (i) => cfg.sources[SRC[i]].focus || [0.5, 0.5];
   const F = ([src, i]) => {
     if (!(src in OFFSET)) console.warn("scroll film: unknown source", src);
     return OFFSET[src] + i;
@@ -79,11 +84,19 @@ function initScrollFilm(root, cfg) {
   let currentFrame = 0;
   let dpr = 1;
 
+  /* Sized from its wrapper, which is 100lvh tall: the phone's URL bar showing or hiding never
+     resizes the canvas, so the picture never jumps under the finger. */
+  const wrap = root.querySelector(".canvas-wrap");
+  let sizedW = 0, sizedH = 0;
   function sizeCanvas() {
+    const w = wrap.clientWidth || window.innerWidth, h = wrap.clientHeight || window.innerHeight;
+    if (w === sizedW && h === sizedH) return false;
+    sizedW = w; sizedH = h;
     dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = Math.round(window.innerWidth * dpr);
-    canvas.height = Math.round(window.innerHeight * dpr);
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
     publishSquareRect();
+    return true;
   }
 
   /* Frame placement. The film is square; the page is not. On landscape
@@ -98,12 +111,14 @@ function initScrollFilm(root, cfg) {
      the left margin) and the whole thing is clamped so a wide frame never leaves a
      gap. Wide frames are drawn at that scale; square frames occupy the centre square
      and float on the ground. Portrait: the centre square goes in the bottom card. */
-  function bleedRect(iw, ih) {
+  function bleedRect(iw, ih, focus = [0.5, 0.5]) {
     const cw = canvas.width, ch = canvas.height;
     const landscape = cw > ch * 1.05;
     if (!landscape) {
-      const size = Math.min(cw * 0.94, ch * 0.38);
-      return { dx: (cw - size) / 2, dy: ch - size - ch * 0.03, dw: size, dh: size, crop: true };
+      // portrait: every frame covers the whole screen, cropped around its source's focus point
+      const s = Math.max(cw / iw, ch / ih), dw = iw * s, dh = ih * s;
+      const [fx, fy] = focus;
+      return { dx: Math.min(0, Math.max(cw - dw, cw / 2 - fx * dw)), dy: Math.min(0, Math.max(ch - dh, ch / 2 - fy * dh)), dw, dh, crop: false, square: false, cover: true };
     }
     if (iw > ih * 1.2) {
       // wide frame: covers the viewport, centred a little right so the copy column keeps the left
@@ -113,13 +128,11 @@ function initScrollFilm(root, cfg) {
       wx = W >= cw ? Math.min(0, Math.max(cw - W, wx)) : Math.max(0, Math.min(cw - W, wx));
       return { dx: wx, dy: (ch - S) / 2, dw: W, dh: S, crop: false, square: false };
     }
-    // square frame: floats on the ground to the right of the copy column, clear of the header
+    // square frame: runs the full height of the screen, flush right; the copy column keeps the ground on its left
     const gutter = Math.min(Math.max(16, cw / dpr * 0.04), 56) * dpr;
     const col = Math.min(Math.max(320, cw / dpr * 0.34), 480) * dpr + gutter;   // mirrors --film-text-col + gutter
-    const top = headerOffset * dpr;
-    const S = Math.min(ch - top - ch * 0.04, cw - col - gutter);
-    const dx = Math.max(col, Math.min(cw - gutter - S, cw * 0.66 - S / 2));
-    return { dx, dy: top + (ch - top - S) / 2, dw: S, dh: S, crop: false, square: true };
+    const S = Math.min(ch, cw - col - gutter);
+    return { dx: cw - S, dy: (ch - S) / 2, dw: S, dh: S, crop: false, square: true };
   }
   function publishSquareRect() {
     const r = bleedRect(1, 1);
@@ -172,49 +185,62 @@ function initScrollFilm(root, cfg) {
     ctx.fillRect(0, 0, edge * 1.35, ch);
   }
 
-  function drawFrame(index, alpha = 1) {
-    let img = frames[index];
-    for (let k = index; !img && k >= 0; k--) img = frames[k];   // nearest frame already loaded
+  /* `pos` may fall between two frames: the later one is laid over at the fraction, so a slow
+     scroll glides from frame to frame instead of stepping (and never crosses into another clip). */
+  function drawFrame(pos, alpha = 1) {
+    const index = Math.floor(pos), frac = pos - index;
+    let i = index, img = frames[i];
+    while (!img && i > 0) img = frames[--i];   // nearest frame already loaded
     const cw = canvas.width, ch = canvas.height;
     ctx.fillStyle = ground;
     ctx.fillRect(0, 0, cw, ch);
     if (!img || alpha <= 0) return;
-    ctx.globalAlpha = Math.min(1, alpha);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    const next = frac > 0.02 && i === index && SRC[index + 1] === SRC[index] ? frames[index + 1] : null;
     if (bleed) {
-      const iw = img.naturalWidth, ih = img.naturalHeight;
-      const r = bleedRect(iw, ih);
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = "high";
-      if (r.crop) {
-        const s = Math.min(iw, ih);
-        ctx.drawImage(img, (iw - s) / 2, (ih - s) / 2, s, s, r.dx, r.dy, r.dw, r.dh);
-      } else {
-        ctx.drawImage(img, r.dx, r.dy, r.dw, r.dh);
-        if (r.square) {
-          // square frame floating on the ground: feather its sides so the edge never reads
-          const f = r.dw * 0.03;
-          for (const [x0, x1] of [[r.dx, r.dx + f], [r.dx + r.dw, r.dx + r.dw - f]]) {
-            const g = ctx.createLinearGradient(x0, 0, x1, 0);
-            g.addColorStop(0, ground); g.addColorStop(1, "rgba(0,0,0,0)");
-            ctx.fillStyle = g; ctx.fillRect(Math.min(x0, x1), r.dy, Math.abs(x1 - x0), r.dh);
-          }
-        } else {
-          drawScrim();
-        }
-      }
+      const r = bleedRect(img.naturalWidth, img.naturalHeight, focusOf(i));
+      const paint = (im, a) => {
+        ctx.globalAlpha = Math.min(1, a);
+        if (r.crop) {
+          const iw = im.naturalWidth, ih = im.naturalHeight, s = Math.min(iw, ih);
+          ctx.drawImage(im, (iw - s) / 2, (ih - s) / 2, s, s, r.dx, r.dy, r.dw, r.dh);
+        } else ctx.drawImage(im, r.dx, r.dy, r.dw, r.dh);
+      };
+      paint(img, alpha);
+      if (next) paint(next, alpha * frac);
       ctx.globalAlpha = 1;
+      if (r.square) {
+        // square frame floating on the ground: feather its sides so the edge never reads
+        const f = r.dw * 0.03;
+        for (const [x0, x1] of [[r.dx, r.dx + f], [r.dx + r.dw, r.dx + r.dw - f]].filter(([x0]) => x0 > 0 && x0 < canvas.width)) {
+          const g = ctx.createLinearGradient(x0, 0, x1, 0);
+          g.addColorStop(0, ground); g.addColorStop(1, "rgba(0,0,0,0)");
+          ctx.fillStyle = g; ctx.fillRect(Math.min(x0, x1), r.dy, Math.abs(x1 - x0), r.dh);
+        }
+      } else if (!r.crop && !r.cover) {
+        drawScrim();
+      }
       return;
     }
     const { dx, dy, dw, dh } = frameRect();
     ctx.save();
     roundedPath(dx, dy, dw, dh, radius * dpr);
     ctx.clip();
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = "high";
+    ctx.globalAlpha = Math.min(1, alpha);
     ctx.drawImage(img, dx, dy, dw, dh);
+    if (next) { ctx.globalAlpha = Math.min(1, alpha * frac); ctx.drawImage(next, dx, dy, dw, dh); }
     ctx.restore();
     ctx.globalAlpha = 1;
   }
+
+  /* One paint per animation frame, however many scroll updates arrive in it */
+  let pending = null, rafId = 0;
+  function requestDraw(pos, alpha = 1) {
+    pending = [pos, alpha];
+    if (!rafId) rafId = requestAnimationFrame(() => { rafId = 0; drawFrame(...pending); });
+  }
+  let currentAlpha = 1;
 
   /* Inside a cut segment: which frame to show and how strongly (the outgoing frame fades over
      the first quarter, the incoming one over the last quarter, ground between). */
@@ -231,7 +257,7 @@ function initScrollFilm(root, cfg) {
     for (const s of TIMELINE) {
       if (p >= s.p0 && p <= s.p1) {
         const t = s.p1 === s.p0 ? 0 : (p - s.p0) / (s.p1 - s.p0);
-        return Math.round(s.f0 + t * (s.f1 - s.f0));
+        return s.f0 + t * (s.f1 - s.f0);
       }
     }
     return p < 0 ? 0 : FRAME_COUNT - 1;
@@ -262,7 +288,7 @@ function initScrollFilm(root, cfg) {
     if (nextToLoad >= FRAME_COUNT) return;
     const i = nextToLoad++;
     loadFrame(i).then(() => {
-      if (i === currentFrame) requestAnimationFrame(() => drawFrame(currentFrame));
+      if (i === Math.floor(currentFrame) || i === Math.floor(currentFrame) + 1) requestDraw(currentFrame, currentAlpha);
       loadNext();
     });
   }
@@ -439,7 +465,6 @@ function initScrollFilm(root, cfg) {
   /* ——— Master scroll binding ——— */
 
   const runway = root.querySelector(".film-runway");
-  let inCut = false;
 
   ScrollTrigger.create({
     trigger: runway,
@@ -451,15 +476,12 @@ function initScrollFilm(root, cfg) {
       const c = cutAt(p);
       if (c) {
         currentFrame = c.frame;
-        requestAnimationFrame(() => drawFrame(currentFrame, c.alpha));
+        currentAlpha = c.alpha;
       } else {
-        const index = progressToFrame(p);
-        if (index !== currentFrame || inCut) {
-          currentFrame = index;
-          requestAnimationFrame(() => drawFrame(currentFrame));
-        }
+        currentFrame = progressToFrame(p);
+        currentAlpha = 1;
       }
-      inCut = !!c;
+      requestDraw(currentFrame, currentAlpha);
       updateCut(c);
       updateBand(p);
       updateOverlay(p);
@@ -504,8 +526,7 @@ function initScrollFilm(root, cfg) {
   /* ——— Resize ——— */
 
   window.addEventListener("resize", () => {
-    sizeCanvas();
-    drawFrame(currentFrame);
+    if (sizeCanvas()) drawFrame(currentFrame, currentAlpha);
   });
 
   /* ——— QA hook: ?p=0.42 jumps straight to that film progress after preload ——— */
